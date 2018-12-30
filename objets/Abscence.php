@@ -6,7 +6,6 @@
  */
 class Abscence
 {
-
     private $id_abscence;
 
     private $ine;
@@ -14,7 +13,7 @@ class Abscence
     private $id_cours;
     
     // Constructeur de la classe
-    public function __construct($pid_abscence,$pine,$pid_cours)
+    public function __construct($pid_abscence, $pine, $pid_cours)
     {
         $this->ine = $pine;
         $this->id_abscence = $pid_abscence;
@@ -39,7 +38,7 @@ class Abscence
     public function setIdAbscence($id_abscence)
     {
         $this->id_abscence = $id_abscence;
-    }  
+    }
     
     /**
      *
@@ -57,7 +56,7 @@ class Abscence
     public function setINE($ine)
     {
         $this->ine = $ine;
-    } 
+    }
 
     /**
      *
@@ -75,7 +74,5 @@ class Abscence
     public function setIdCours($id_cours)
     {
         $this->id_cours = $id_cours;
-    } 
+    }
 }
-
-?>

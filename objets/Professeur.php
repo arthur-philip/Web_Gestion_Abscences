@@ -32,7 +32,4 @@ class Professeur extends Personnel
     {
         $this->setIdPersonnel($pIdProf);
     }
-
 }
-
-?>

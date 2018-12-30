@@ -32,7 +32,4 @@ class Administratif extends Personnel
     {
         $this->setIdPersonnel($pIdAdministratif);
     }
-
 }
-
-?>

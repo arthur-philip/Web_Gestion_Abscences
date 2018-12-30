@@ -6,7 +6,6 @@
  */
 class Salle
 {
-
     private $num;
     
     // Constructeur de la classe
@@ -34,7 +33,4 @@ class Salle
     {
         $this->num = $pNum;
     }
-
 }
-
-?>

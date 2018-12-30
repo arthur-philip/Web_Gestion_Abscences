@@ -6,7 +6,6 @@
  */
 class Cours
 {
-
     private $titre;
 
     private $numeroSalle;
@@ -161,5 +160,3 @@ class Cours
         $this->dateFin = $dateFin;
     }
 }
-
-?>

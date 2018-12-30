@@ -6,7 +6,6 @@
  */
 class Matiere
 {
-
     private $id;
 
     private $libelle;
@@ -56,7 +55,4 @@ class Matiere
     {
         $this->descSalle = $pLibelle;
     }
-
 }
-
-?>

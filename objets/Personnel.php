@@ -6,7 +6,6 @@
  */
 class Personnel
 {
-
     private $id_personnel;
 
     private $mdp;
@@ -16,7 +15,7 @@ class Personnel
     private $prenom;
     
     // Constructeur de la classe
-    public function __construct($pIdPersonnel,$pMdp,$pNom,$pPrenom)
+    public function __construct($pIdPersonnel, $pMdp, $pNom, $pPrenom)
     {
         $this->id_personnel = $pIdPersonnel;
         $this->mdp = $pMdp;
@@ -97,7 +96,4 @@ class Personnel
     {
         $this->mdp = $pMdp;
     }
-
 }
-
-?>

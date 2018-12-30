@@ -6,17 +6,16 @@
  */
 class Etudiant
 {
-
     private $ine;
 
-    private $id_groupe; 
+    private $id_groupe;
 
     private $nom;
 
     private $prenom;
     
     // Constructeur de la classe
-    public function __construct($pine,$pid_groupe,$pnom,$pprenom)
+    public function __construct($pine, $pid_groupe, $pnom, $pprenom)
     {
         $this->ine = $pine;
         $this->id_groupe = $pid_groupe;
@@ -97,7 +96,4 @@ class Etudiant
     {
         $this->id_groupe = $id_groupe;
     }
-    
 }
-
-?>

@@ -11,7 +11,7 @@ class Departement
     private $libelle;
 
     // Constructeur de la classe
-    public function __construct($plibelle,$pid_departement)
+    public function __construct($plibelle, $pid_departement)
     {
         $this->libelle = $plibelle;
         $this->id_departement = $pid_departement;
@@ -55,5 +55,3 @@ class Departement
         $this->id_departement = $pid_departement;
     }
 }
-
-?>

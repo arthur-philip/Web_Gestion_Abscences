@@ -6,15 +6,14 @@
  */
 class Filiere
 {
-
     private $id_filiere;
 
-    private $id_dep; 
+    private $id_dep;
 
     private $libelle;
     
     // Constructeur de la classe
-    public function __construct($pid_filiere,$pid_dep,$plibelle)
+    public function __construct($pid_filiere, $pid_dep, $plibelle)
     {
         $this->id_filiere = $pid_filiere;
         $this->id_dep = $pid_dep;
@@ -68,15 +67,12 @@ class Filiere
         return $this->libelle;
     }
  
-     /**
-      *
-      * @param mixed $id filiere
-      */
+    /**
+     *
+     * @param mixed $id filiere
+     */
     public function setIdLibelle($lib)
     {
         $this->libelle = $lib;
     }
-
 }
-
-?>
