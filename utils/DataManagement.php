@@ -5,12 +5,12 @@ class DataManagement
 
 	private $user = "site_user";
 	private $pass = "KzdGtAhJAzLPswLE";
-	private $dbName = "gestioneleve";
+	private $dbName = "gestion_eleve";
 
     private $db = null;
 
     public function __construct() {
-		$this->db = new PDO('mysql:host=localhost;dbname=gestioneleve;charset=utf8', $this->user, $this->pass);
+		$this->db = new PDO('mysql:host=localhost;dbname=gestion_eleve;charset=utf8', $this->user, $this->pass);
     }
 	
 	public function insertCours($cours) {
@@ -32,16 +32,17 @@ class DataManagement
 	}
 	
 	public function checkUser($login, $password){
-		$reqCheckUser = $this->db->prepare("select * from personnel where login = ? and password = ?");// TODO: corriger la requete ?
+		$reqCheckUser = $this->db->prepare("select nom, prenom, id_responsabilite from personnel where login = ? and mdp = ?");
 		if($reqCheckUser->execute(array($login, $password))){
 			// Si les informations sont correctes (au moins un résultat trouvé)
 			while($ligne=$reqCheckUser->fetch()){
-				return 0;// TODO: renvoyer la responsabilté de l'utilisateur
+				// Renvoi les infos de l'utilisateur (nom, prénom, responsabilité)
+				return [$ligne["nom"], $ligne["prenom"], $ligne["id_responsabilite"]];
 			}
 		}
 		return -1;
 	}
-   
+
 }
 
 ?>
