@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  Dim 30 déc. 2018 à 14:18
+-- Généré le :  lun. 31 déc. 2018 à 17:29
 -- Version du serveur :  5.7.23
 -- Version de PHP :  7.2.10
 
@@ -120,16 +120,31 @@ CREATE TABLE IF NOT EXISTS `filiere` (
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `groupe`
+--
+
+DROP TABLE IF EXISTS `groupe`;
+CREATE TABLE IF NOT EXISTS `groupe` (
+  `id_groupe` int(10) NOT NULL AUTO_INCREMENT,
+  `id_filiere` int(10) NOT NULL,
+  `libelle` varchar(25) NOT NULL,
+  PRIMARY KEY (`id_groupe`),
+  KEY `groupe_filiere_fk` (`id_filiere`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `groupe_etudiant`
 --
 
 DROP TABLE IF EXISTS `groupe_etudiant`;
 CREATE TABLE IF NOT EXISTS `groupe_etudiant` (
   `id_groupe` int(10) NOT NULL AUTO_INCREMENT,
-  `id_filiere` int(10) NOT NULL,
-  `libelle` varchar(25) NOT NULL,
-  PRIMARY KEY (`id_groupe`),
-  KEY `groupe_etudiant_filiere_fk` (`id_filiere`)
+  `ine_etudiant` varchar(11) NOT NULL,
+  PRIMARY KEY (`id_groupe`,`ine_etudiant`) USING BTREE,
+  UNIQUE KEY `groupe_etudiant_ine_etudiant_fk` (`ine_etudiant`),
+  KEY `groupe_etudiant_id_groupe_fk` (`id_groupe`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -158,12 +173,20 @@ CREATE TABLE IF NOT EXISTS `personnel` (
   `mdp` varchar(25) NOT NULL,
   `nom` varchar(25) NOT NULL,
   `prenom` varchar(25) NOT NULL,
-  `email` varchar(50) NOT NULL,
   `id_responsabilite` int(10) NOT NULL,
   PRIMARY KEY (`id_personnel`),
   UNIQUE KEY `uniq_login` (`login`) USING BTREE,
   KEY `personnel_responsabilite_fk` (`id_responsabilite`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `personnel`
+--
+
+INSERT INTO `personnel` (`id_personnel`, `login`, `mdp`, `nom`, `prenom`, `id_responsabilite`) VALUES
+(1, 'admin', 'admin', '', '', 0),
+(2, 'administratif', 'administratif', '', '', 1),
+(3, 'prof', 'prof', '', '', 2);
 
 -- --------------------------------------------------------
 
@@ -176,7 +199,16 @@ CREATE TABLE IF NOT EXISTS `responsabilite` (
   `id_responsabilite` int(10) NOT NULL AUTO_INCREMENT,
   `libelle` varchar(25) NOT NULL,
   PRIMARY KEY (`id_responsabilite`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `responsabilite`
+--
+
+INSERT INTO `responsabilite` (`id_responsabilite`, `libelle`) VALUES
+(0, 'Administrateur'),
+(1, 'Administratif'),
+(2, 'Professeur');
 
 -- --------------------------------------------------------
 
@@ -214,7 +246,7 @@ ALTER TABLE `cours`
 -- Contraintes pour la table `etudiant`
 --
 ALTER TABLE `etudiant`
-  ADD CONSTRAINT `etudiant_groupe_fk` FOREIGN KEY (`id_groupe`) REFERENCES `cours` (`id_cours`);
+  ADD CONSTRAINT `etudiant_groupe_fk` FOREIGN KEY (`id_groupe`) REFERENCES `groupe` (`id_groupe`);
 
 --
 -- Contraintes pour la table `filiere`
@@ -223,10 +255,17 @@ ALTER TABLE `filiere`
   ADD CONSTRAINT `filiere_departement_fk` FOREIGN KEY (`id_departement`) REFERENCES `departement` (`id_departement`);
 
 --
+-- Contraintes pour la table `groupe`
+--
+ALTER TABLE `groupe`
+  ADD CONSTRAINT `groupe_filiere_fk` FOREIGN KEY (`id_filiere`) REFERENCES `filiere` (`id_filiere`);
+
+--
 -- Contraintes pour la table `groupe_etudiant`
 --
 ALTER TABLE `groupe_etudiant`
-  ADD CONSTRAINT `groupe_etudiant_filiere_fk` FOREIGN KEY (`id_filiere`) REFERENCES `filiere` (`id_filiere`);
+  ADD CONSTRAINT `groupe_etudiant_id_groupe_fk` FOREIGN KEY (`id_groupe`) REFERENCES `groupe` (`id_groupe`),
+  ADD CONSTRAINT `groupe_etudiant_ine_etudiant_fk	` FOREIGN KEY (`ine_etudiant`) REFERENCES `etudiant` (`ine_etudiant`);
 
 --
 -- Contraintes pour la table `personnel`

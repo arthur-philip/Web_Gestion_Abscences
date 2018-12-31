@@ -1,10 +1,10 @@
 <?php
 
 /**
- * @author guilhem.mateo
+ * @author guilhem.mateo, arthur.philip
  *
  */
-class Departement
+class Groupe
 {
     private $id_groupe;
 

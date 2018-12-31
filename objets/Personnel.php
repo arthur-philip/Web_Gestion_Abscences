@@ -13,14 +13,17 @@ class Personnel
     private $nom;
 
     private $prenom;
+
+    private $id_responsabilite;
     
     // Constructeur de la classe
-    public function __construct($pIdPersonnel, $pMdp, $pNom, $pPrenom)
+    public function __construct($pIdPersonnel, $pMdp, $pNom, $pPrenom, $pIdResponsabilite)
     {
         $this->id_personnel = $pIdPersonnel;
         $this->mdp = $pMdp;
         $this->nom = $pNom;
         $this->prenom = $pPrenom;
+        $this->id_responsabilite = $pIdResponsabilite;
     }
     
     /* Getter et Setter */
@@ -60,6 +63,15 @@ class Personnel
     {
         return $this->mdp;
     }
+
+    /**
+     *
+     * @return mixed
+     */
+    public function getIdResponsabilite()
+    {
+        return $this->id_responsabilite;
+    }
     
     /**
      *
@@ -95,5 +107,14 @@ class Personnel
     public function setMdp($pMdp)
     {
         $this->mdp = $pMdp;
+    }
+
+    /**
+     *
+     * @param mixed $pIdResponsabilite
+     */
+    public function setIdResponsabilite($pIdResponsabilite)
+    {
+        $this->id_responsabilite = $pIdResponsabilite;
     }
 }

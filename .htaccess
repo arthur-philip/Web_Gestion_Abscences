@@ -9,3 +9,4 @@ RewriteEngine on
 # Masquer l'extension des pages
 RewriteRule ^index$  /index.php [L]
 RewriteRule ^connexion$  /pages/connexion.php [L]
+RewriteRule ^erreur$  /pages/erreur.php [L]

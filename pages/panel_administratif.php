@@ -6,7 +6,7 @@
         <li>Importation des étudiants</li>
         <li>Importation des plannings (Filière par filière)</li>
         <li>Suppression d’un planning (Filière par filière)</li>
-        <li>Voir les listes associées</li>
+        <li>Voir les listes associées (étudiants + matières)</li>
     </ul>
     <?php
         //icsExtractor(file_get_contents("ICS/Informatique.ics"));

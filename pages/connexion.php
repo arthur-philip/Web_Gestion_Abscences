@@ -1,7 +1,16 @@
 <?php
     session_start();
     include_once('../utils/DataManagement.php');
-    $dataManagement = new DataManagement();// TODO: vérifier que la connexion à la bdd se passe sans soucis, sinon affichage d'une erreur
+
+    // Connexion à la base de données.
+    try {
+        $dataManagement = new DataManagement();
+    } catch (Exception $e) {
+        // Redirection sur la page d'erreur en cas de problème.
+        header('Location: erreur?erreur=Connexion à la base de donnée impossible');
+        exit();
+    }
+
     // On vérifie s'il y a des informations de connexion dans le POST
     if (isset($_POST['login']) && isset($_POST['password'])) {
         // Récupération des informations
@@ -17,16 +26,11 @@
             $_SESSION["nom"]=$data[0];
             $_SESSION["prenom"]=$data[1];
             $_SESSION["responsabilite"]=$data[2];
-        // TODO: mettre la responsibilité dans la session
         }
         // Sinon affiche l'erreur
         else {
             echo "<script>alert(\"Login/mot de passe incorrect, réessayez\")</script>";
         }
-        /*
-        $_SESSION["login"] = $login;
-        $_SESSION["password"] = $password;
-        */
     }
 
     //si user dans la session -> retour à l'index

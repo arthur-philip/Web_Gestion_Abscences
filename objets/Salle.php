@@ -6,12 +6,15 @@
  */
 class Salle
 {
-    private $num;
+    private $id_salle;
+
+    private $libelle;
     
     // Constructeur de la classe
-    public function __construct($pNum)
+    public function __construct($pLibelle, $pIdSalle)
     {
-        $this->num = $pNum;
+        $this->id_salle = $pIdSalle;
+        $this->libelle = $pLibelle;
     }
     
     /* Getter et Setter */
@@ -20,17 +23,35 @@ class Salle
      *
      * @return mixed
      */
-    public function getNumero()
+    public function getIdSalle()
     {
-        return $this->num;
+        return $this->id_salle;
+    }
+
+    /**
+     *
+     * @param mixed $pIdSalle
+     */
+    public function setIdSalle($pIdSalle)
+    {
+        $this->id_salle = $pIdSalle;
+    }
+
+    /**
+     *
+     * @return mixed
+     */
+    public function getLibelle()
+    {
+        return $this->libelle;
     }
 
     /**
      *
      * @param mixed $numero de salle
      */
-    public function setNumero($pNum)
+    public function setLibelle($pLibelle)
     {
-        $this->num = $pNum;
+        $this->libelle = $pLibelle;
     }
 }
