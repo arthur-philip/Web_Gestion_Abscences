@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mar. 01 jan. 2019 à 19:48
+-- Généré le :  mar. 01 jan. 2019 à 20:32
 -- Version du serveur :  5.7.23
 -- Version de PHP :  7.2.10
 
@@ -108,11 +108,9 @@ CREATE TABLE IF NOT EXISTS `departement` (
 DROP TABLE IF EXISTS `etudiant`;
 CREATE TABLE IF NOT EXISTS `etudiant` (
   `ine_etudiant` varchar(11) NOT NULL,
-  `id_groupe` int(10) NOT NULL,
   `nom` int(25) NOT NULL,
   `prenom` int(25) NOT NULL,
-  PRIMARY KEY (`ine_etudiant`),
-  KEY `etudiant_groupe_fk` (`id_groupe`)
+  PRIMARY KEY (`ine_etudiant`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -261,12 +259,6 @@ ALTER TABLE `cours`
 ALTER TABLE `cours_groupe`
   ADD CONSTRAINT `cours_groupe_id_cours` FOREIGN KEY (`id_cours`) REFERENCES `cours` (`id_cours`),
   ADD CONSTRAINT `cours_groupe_id_groupe` FOREIGN KEY (`id_groupe`) REFERENCES `groupe` (`id_groupe`);
-
---
--- Contraintes pour la table `etudiant`
---
-ALTER TABLE `etudiant`
-  ADD CONSTRAINT `etudiant_groupe_fk` FOREIGN KEY (`id_groupe`) REFERENCES `groupe` (`id_groupe`);
 
 --
 -- Contraintes pour la table `filiere`
