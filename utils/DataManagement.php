@@ -166,7 +166,19 @@ class DataManagement
         $reqInsPer->execute();
     }
 
-    // TODO: responsabilite
+    /**
+     * Insertion d'une responsabilite en base de données.
+     *
+     * @param $responsabilite La responsabilite à insérer dans la base de données.
+    */
+    public function insertResponsabilite($responsabilite)
+    {
+        // Remplis la table Salle
+        $reqInsRes = $this->db->prepare("INSERT INTO responsabilite (libelle)
+            VALUES (:libelle)");
+        $reqInsRes->bindValue(':libelle', $responsabilite->$libelle);
+        $reqInsRes->execute();
+    }
 
     /**
      * Insertion d'une salle en base de données.

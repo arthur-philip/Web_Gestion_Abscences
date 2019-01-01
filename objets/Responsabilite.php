@@ -1,19 +1,19 @@
 <?php
 
 /**
- * @author guilhem.mateo
+ * @author arthur.philip
  *
  */
-class Salle
+class Responsabilite
 {
-    private $id_salle;
+    private $id_responsabilite;
 
     private $libelle;
     
     // Constructeur de la classe
-    public function __construct($pIdSalle, $pLibelle)
+    public function __construct($pIdResponsabilite, $pLibelle)
     {
-        $this->id_salle = $pIdSalle;
+        $this->id_responsabilite = $pIdResponsabilite;
         $this->libelle = $pLibelle;
     }
     
@@ -23,18 +23,18 @@ class Salle
      *
      * @return mixed
      */
-    public function getIdSalle()
+    public function getIdResponsabilite()
     {
-        return $this->id_salle;
+        return $this->id_responsabilite;
     }
 
     /**
      *
-     * @param mixed $pIdSalle
+     * @param mixed $pIdResponsabilite
      */
-    public function setIdSalle($pIdSalle)
+    public function setIdSalle($pIdResponsabilite)
     {
-        $this->id_salle = $pIdSalle;
+        $this->id_responsabilite = $pIdResponsabilite;
     }
 
     /**
