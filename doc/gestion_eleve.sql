@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  lun. 31 déc. 2018 à 17:29
+-- Généré le :  mar. 01 jan. 2019 à 19:48
 -- Version du serveur :  5.7.23
 -- Version de PHP :  7.2.10
 
@@ -63,14 +63,27 @@ DROP TABLE IF EXISTS `cours`;
 CREATE TABLE IF NOT EXISTS `cours` (
   `id_cours` int(10) NOT NULL AUTO_INCREMENT,
   `id_matiere` int(10) NOT NULL,
-  `id_groupe` int(10) NOT NULL,
   `id_salle` int(10) NOT NULL,
   `horaire_debut` date NOT NULL,
   `horaire_fin` date NOT NULL,
   PRIMARY KEY (`id_cours`),
   KEY `cours_matiere_fk` (`id_matiere`),
-  KEY `cours_groupe_etudiant_fk` (`id_groupe`),
   KEY `cours_salle_fk` (`id_salle`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `cours_groupe`
+--
+
+DROP TABLE IF EXISTS `cours_groupe`;
+CREATE TABLE IF NOT EXISTS `cours_groupe` (
+  `id_cours` int(10) NOT NULL,
+  `id_groupe` int(10) NOT NULL,
+  PRIMARY KEY (`id_cours`,`id_groupe`),
+  KEY `cours_groupe_id_groupe` (`id_groupe`) USING BTREE,
+  KEY `cours_groupe_id_cours` (`id_cours`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -177,7 +190,7 @@ CREATE TABLE IF NOT EXISTS `personnel` (
   PRIMARY KEY (`id_personnel`),
   UNIQUE KEY `uniq_login` (`login`) USING BTREE,
   KEY `personnel_responsabilite_fk` (`id_responsabilite`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `personnel`
@@ -186,7 +199,8 @@ CREATE TABLE IF NOT EXISTS `personnel` (
 INSERT INTO `personnel` (`id_personnel`, `login`, `mdp`, `nom`, `prenom`, `id_responsabilite`) VALUES
 (1, 'admin', 'admin', '', '', 0),
 (2, 'administratif', 'administratif', '', '', 1),
-(3, 'prof', 'prof', '', '', 2);
+(3, 'prof', 'prof', '', '', 2),
+(4, '111111', '2222222', '', '', 1);
 
 -- --------------------------------------------------------
 
@@ -238,9 +252,15 @@ ALTER TABLE `abscence`
 -- Contraintes pour la table `cours`
 --
 ALTER TABLE `cours`
-  ADD CONSTRAINT `cours_groupe_etudiant_fk` FOREIGN KEY (`id_groupe`) REFERENCES `groupe_etudiant` (`id_groupe`),
   ADD CONSTRAINT `cours_matiere_fk` FOREIGN KEY (`id_matiere`) REFERENCES `matiere` (`id_matiere`),
   ADD CONSTRAINT `cours_salle_fk	` FOREIGN KEY (`id_salle`) REFERENCES `salle` (`id_salle`);
+
+--
+-- Contraintes pour la table `cours_groupe`
+--
+ALTER TABLE `cours_groupe`
+  ADD CONSTRAINT `cours_groupe_id_cours` FOREIGN KEY (`id_cours`) REFERENCES `cours` (`id_cours`),
+  ADD CONSTRAINT `cours_groupe_id_groupe` FOREIGN KEY (`id_groupe`) REFERENCES `groupe` (`id_groupe`);
 
 --
 -- Contraintes pour la table `etudiant`

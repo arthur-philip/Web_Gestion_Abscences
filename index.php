@@ -6,7 +6,20 @@
         header('Location: pages/connexion');
         exit();
     }
-    
+
+    // Importation des fonctions usuelles de connexion à la base de données.
+    include_once('utils/DataManagement.php');
+    include_once('objets/Personnel.php');
+
+    // Connexion à la base de données.
+    try {
+        $dataManagement = new DataManagement();
+    } catch (Exception $e) {
+        // Redirection sur la page d'erreur en cas de problème.
+        header('Location: erreur?erreur=Connexion à la base de donnée impossible');
+        exit();
+    }
+
     // VARIABLES DES RESPONSABILITÉS
     $resp_administrateur=0;
     $resp_administratif=1;
@@ -25,10 +38,6 @@
     <!--HEADER-->
 	<header>
 		<h1>Acceuil</h1>
-		<h3>Login: <?php print $_SESSION['login'];?></h3>
-		<h3>Nom: <?php print $_SESSION['nom'];?></h3>
-		<h3>Prenom: <?php print $_SESSION['prenom'];?></h3>
-		<h3>Responsabilite: <?php print $_SESSION['responsabilite'];?></h3>
 		<a href="utils/deconnexion.php">Deconnexion</a>
 	</header>
 	<!--CONTENU-->

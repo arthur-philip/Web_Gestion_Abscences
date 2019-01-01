@@ -29,12 +29,12 @@ class DataManagement
      *
      * @param $abscence L'abscence à insérer dans la base de données.
     */
-    public function insertAbscence($abscence)
+    public function insertAbscence(Abscence $abscence)
     {
         // Remplis la table Abscence
         $reqInsAbs = $this->db->prepare("INSERT INTO abscence (id_cours, ine_etudiant) VALUES (:idCours, :ineEtudiant)");
-        $reqInsAbs->bindValue(':idCours', $abscence->id_cours);
-        $reqInsAbs->bindValue(':ineEtudiant', $abscence->$ine);
+        $reqInsAbs->bindValue(':idCours', $abscence->getIdCours());
+        $reqInsAbs->bindValue(':ineEtudiant', $abscence->getINE());
         $reqInsAbs->execute();
     }
 
@@ -45,16 +45,14 @@ class DataManagement
      *
      * @param $cours Le cours à insérer dans la base de données.
     */
-    public function insertCours($cours)
+    public function insertCours(Cours $cours)
     {
         // Remplis la table Cours
-        $reqCours = $this->db->prepare("INSERT INTO cours (id_matiere, numero_salle, id_groupe, horaire_debut, horaire_fin) VALUES (:idMatiere, :idSalle, :idGroup, :hDebut, :hFin)");
-        $reqCours->bindValue(':idMatiere', $idMatiere);
-        $reqCours->bindValue(':idSalle', $idSalle);
-        $reqCours->bindValue(':idGroup', $idGroup);
-        $reqCours->bindValue(':prof', $idProf);
-        $reqCours->bindValue(':hDebut', $cours->getDateDebut());
-        $reqCours->bindValue(':hFin', $cours->getDateFin());
+        $reqCours = $this->db->prepare("INSERT INTO cours (id_matiere, numero_salle, horaire_debut, horaire_fin) VALUES (:idMatiere, :idSalle, :hDebut, :hFin)");
+        $reqCours->bindValue(':idMatiere', $cours->getIdMatiere());
+        $reqCours->bindValue(':idSalle', $cours->getIdSalle());
+        $reqCours->bindValue(':hDebut', $cours->getHoraireDebut());
+        $reqCours->bindValue(':hFin', $cours->getHoraireFin());
         $reqProf->execute();
     }
 
@@ -69,17 +67,19 @@ class DataManagement
             $this->insertCours($value);
         }
     }
+
+    // TODO: cours_groupe
     
     /**
      * Insertion d'un departement en base de données.
      *
      * @param $departement Le departement à insérer dans la base de données.
     */
-    public function insertDepartement($departement)
+    public function insertDepartement(Departement $departement)
     {
         // Remplis la table Departement
         $reqInsDept = $this->db->prepare("INSERT INTO departement (libelle) VALUES (:libelleDepart)");
-        $reqInsDept->bindValue(':libelleDepart', $departement->libelle);
+        $reqInsDept->bindValue(':libelleDepart', $departement->getLibelle());
         $reqInsDept->execute();
     }
 
@@ -88,14 +88,14 @@ class DataManagement
      *
      * @param $etudiant L'étudiant à insérer dans la base de données.
     */
-    public function insertEtudiant($etudiant)
+    public function insertEtudiant(Etudiant $etudiant)
     {
         // Remplis la table Etudiant
         $reqInsEtu = $this->db->prepare("INSERT INTO etudiant (ine_etudiant, id_groupe, nom, prenom) VALUES (:ineEtudiant, :idGroupe, :nom, :prenom)");
-        $reqInsEtu->bindValue(':ineEtudiant', $etudiant->$ine);
-        $reqInsEtu->bindValue(':idGroupe', $etudiant->$id_groupe);
-        $reqInsEtu->bindValue(':nom', $etudiant->$nom);
-        $reqInsEtu->bindValue(':prenom', $etudiant->$prenom);
+        $reqInsEtu->bindValue(':ineEtudiant', $etudiant->getINE());
+        $reqInsEtu->bindValue(':idGroupe', $etudiant->getIdGroupe());
+        $reqInsEtu->bindValue(':nom', $etudiant->getNom());
+        $reqInsEtu->bindValue(':prenom', $etudiant->getPrenom());
         $reqInsEtu->execute();
     }
 
@@ -104,12 +104,12 @@ class DataManagement
      *
      * @param $filiere La filiere à insérer dans la base de données.
     */
-    public function insertFiliere($filiere)
+    public function insertFiliere(Filiere $filiere)
     {
         // Remplis la table Filiere
         $reqInsFil = $this->db->prepare("INSERT INTO filiere (id_departement, libelle) VALUES (:idDepartement, :libelle)");
-        $reqInsFil->bindValue(':idDepartement', $filiere->$id_dep);
-        $reqInsFil->bindValue(':libelle', $filiere->$libelle);
+        $reqInsFil->bindValue(':idDepartement', $filiere->getIdDepartement());
+        $reqInsFil->bindValue(':libelle', $filiere->getLibelle());
         $reqInsFil->execute();
     }
 
@@ -118,12 +118,12 @@ class DataManagement
      *
      * @param $groupe Le groupe à insérer dans la base de données.
     */
-    public function insertGroupe($groupe)
+    public function insertGroupe(Groupe $groupe)
     {
         // Remplis la table Groupe
         $reqInsGro = $this->db->prepare("INSERT INTO groupe (id_filiere, libelle) VALUES (:idFiliere, :libelle)");
-        $reqInsGro->bindValue(':idFiliere', $groupe->$id_filiere);
-        $reqInsGro->bindValue(':libelle', $groupe->$libelle);
+        $reqInsGro->bindValue(':idFiliere', $groupe->getIdFiliere());
+        $reqInsGro->bindValue(':libelle', $groupe->getLibelle());
         $reqInsGro->execute();
     }
 
@@ -134,11 +134,11 @@ class DataManagement
      *
      * @param $matiere La matière à insérer dans la base de données.
     */
-    public function insertMatiere($matiere)
+    public function insertMatiere(Matiere $matiere)
     {
         // Remplis la table Matiere
         $reqInsMat = $this->db->prepare("INSERT INTO matiere (libelle) VALUES (:libelle)");
-        $reqInsMat->bindValue(':libelle', $matiere->$libelle);
+        $reqInsMat->bindValue(':libelle', $matiere->getLibelle());
         $reqInsMat->execute();
     }
 
@@ -147,15 +147,15 @@ class DataManagement
      *
      * @param $personnel Le membre du personnel à insérer dans la base de données.
     */
-    public function insertPersonnel($personnel)
+    public function insertPersonnel(Personnel $personnel)
     {
         // Remplis la table Personnel
-        $reqInsPer = $this->db->prepare("INSERT INTO personnel (login, mdp, nom, prenom, id_responsabilite) VALUES (:login, :mdp, :nom, prenom, id_responsabilite)");
-        $reqInsPer->bindValue(':login', $personnel->$login);
-        $reqInsPer->bindValue(':mdp', $personnel->$mdp);
-        $reqInsPer->bindValue(':nom', $personnel->$nom);
-        $reqInsPer->bindValue(':prenom', $personnel->$prenom);
-        $reqInsPer->bindValue(':id_responsabilite', $personnel->$id_responsabilite);
+        $reqInsPer = $this->db->prepare("INSERT INTO personnel (login, mdp, nom, prenom, id_responsabilite) VALUES (:login, :mdp, :nom, :prenom, :idResponsabilite)");
+        $reqInsPer->bindValue(':login', $personnel->getLogin());
+        $reqInsPer->bindValue(':mdp', $personnel->getMdp());
+        $reqInsPer->bindValue(':nom', $personnel->getNom());
+        $reqInsPer->bindValue(':prenom', $personnel->getPrenom());
+        $reqInsPer->bindValue(':idResponsabilite', $personnel->getIdResponsabilite());
         $reqInsPer->execute();
     }
 
@@ -164,11 +164,11 @@ class DataManagement
      *
      * @param $responsabilite La responsabilite à insérer dans la base de données.
     */
-    public function insertResponsabilite($responsabilite)
+    public function insertResponsabilite(Responsabilite $responsabilite)
     {
         // Remplis la table Responsabilite
         $reqInsRes = $this->db->prepare("INSERT INTO responsabilite (libelle) VALUES (:libelle)");
-        $reqInsRes->bindValue(':libelle', $responsabilite->$libelle);
+        $reqInsRes->bindValue(':libelle', $responsabilite->getLibelle());
         $reqInsRes->execute();
     }
 
@@ -177,11 +177,11 @@ class DataManagement
      *
      * @param $salle La salle à insérer dans la base de données.
     */
-    public function insertSalle($salle)
+    public function insertSalle(Salle $salle)
     {
         // Remplis la table Salle
         $reqInsSal = $this->db->prepare("INSERT INTO salle (libelle) VALUES (:libelle)");
-        $reqInsSal->bindValue(':libelle', $salle->$libelle);
+        $reqInsSal->bindValue(':libelle', $salle->getLibelle());
         $reqInsSal->execute();
     }
 
@@ -192,13 +192,13 @@ class DataManagement
      *
      * @param $abscence L'abscence à mettre à jour dans la base de données.
     */
-    public function updateAbscence($abscence)
+    public function updateAbscence(Abscence $abscence)
     {
         // Mise à jour de la table Abscence
         $reqUpdAbs = $this->db->prepare("UPDATE abscence SET id_cours = :idCours, ine_etudiant = :ineEtudiant WHERE id_abscence = :idAbscence");
-        $reqUpdAbs->bindValue(':idAbscence', $abscence->$id_abscence);
-        $reqUpdAbs->bindValue(':idCours', $abscence->$id_cours);
-        $reqUpdAbs->bindValue(':ineEtudiant', $abscence->$ine);
+        $reqUpdAbs->bindValue(':idAbscence', $abscence->getIdAbscence());
+        $reqUpdAbs->bindValue(':idCours', $abscence->getIdAbscence());
+        $reqUpdAbs->bindValue(':ineEtudiant', $abscence->getINE());
         $reqUpdAbs->execute();
     }
 
@@ -209,11 +209,11 @@ class DataManagement
      *
      * @param $abscence L'abscence à supprimer de la base de données.
     */
-    public function deleteAbscence($abscence)
+    public function deleteAbscence(Abscence $abscence)
     {
         // Mise à jour de la table Abscence
         $reqDelAbs = $this->db->prepare("DELETE FROM abscence WHERE id_abscence = :idAbscence");
-        $reqDelAbs->bindValue(':idAbscence', $abscence->$id_abscence);
+        $reqDelAbs->bindValue(':idAbscence', $abscence->getIdAbscence());
         $reqDelAbs->execute();
     }
 
@@ -226,11 +226,12 @@ class DataManagement
     */
     public function selectAllAbscence()
     {
+        $data = [];
         // Mise à jour de la table Abscence
         $reqSelAllAbs = $this->db->prepare("SELECT * FROM abscence");
         if ($reqSelAllAbs->execute()) {
             // Si les informations sont correctes (au moins un résultat trouvé)
-            for ($cpt=0; $ligne=$reqCheckUser->fetch(); $cpt++) {
+            for ($cpt=0; $ligne=$reqSelAllAbs->fetch(); $cpt++) {
                 // On renvoit les infos de l'utilisateur (nom, prénom, responsabilité)
                 $data[$cpt] = $ligne;
             }

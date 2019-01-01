@@ -1,35 +1,29 @@
 <?php
 
 /**
- * @author bastien.ranc
+ * @author arthur.philip
  *
  */
 class Cours
 {
-    private $titre;
+    private $id_cours;
 
-    private $numeroSalle;
+    private $id_matiere;
 
-    private $descSalle;
+    private $id_salle;
 
-    private $profs = array();
+    private $horaire_debut;
 
-    private $promo;
-
-    private $dateDebut;
-
-    private $dateFin;
+    private $horaire_fin;
     
     // Constructeur de la classe
-    public function __construct($pTitre, $pNumSalle, $pDescSalle, $pProf, $pPromo, $pDateDebut, $pDateFin)
+    public function __construct($pIdCours, $pIdMatiere, $pIdSalle, $pHoraireDebut, $pHoraireFin)
     {
-        $this->titre = $pTitre;
-        $this->numeroSalle = $pNumSalle;
-        $this->descSalle = $pDescSalle;
-        $this->profs = $pProf;
-        $this->promo = $pPromo;
-        $this->dateDebut = $pDateDebut;
-        $this->dateFin = $pDateFin;
+        $this->id_cours = $pIdCours;
+        $this->id_matiere = $pIdMatiere;
+        $this->id_salle = $pIdSalle;
+        $this->horaire_debut = $pHoraireDebut;
+        $this->horaire_fin = $pHoraireFin;
     }
     
     /* Getter et Setter */
@@ -38,125 +32,90 @@ class Cours
      *
      * @return mixed
      */
-    public function getTitre()
+    public function getIdCours()
     {
-        return $this->titre;
+        return $this->id_cours;
     }
 
     /**
      *
      * @return mixed
      */
-    public function getNumeroSalle()
+    public function getIdMatiere()
     {
-        return $this->numeroSalle;
+        return $this->id_matiere;
     }
 
     /**
      *
      * @return mixed
      */
-    public function getDescSalle()
+    public function getIdSalle()
     {
-        return $this->descSalle;
+        return $this->id_salle;
     }
 
     /**
      *
      * @return mixed
      */
-    public function getProfs()
+    public function getHoraireDebut()
     {
-        return $this->profs;
+        return $this->horaire_debut;
     }
 
     /**
      *
      * @return mixed
      */
-    public function getPromo()
+    public function getHoraireFin()
     {
-        return $this->promo;
+        return $this->horaire_fin;
     }
 
     /**
      *
-     * @return mixed
+     * @param mixed $pIdCours
      */
-    public function getDateDebut()
+    public function setIdCours($pIdCours)
     {
-        return $this->dateDebut->format('Y-m-d H:i:s');
+        $this->id_cours = $pIdCours;
     }
 
     /**
      *
-     * @return mixed
+     * @param mixed $pIdMatiere
      */
-    public function getDateFin()
+    public function setIdMatiere($pIdMatiere)
     {
-        return $this->dateFin->format('Y-m-d H:i:s');
+        $this->id_matiere = $pIdMatiere;
     }
 
     /**
      *
-     * @param mixed $titre
+     * @param mixed $pIdSalle
      */
-    public function setTitre($titre)
+    public function setIdSalle($pIdSalle)
     {
-        $this->titre = $titre;
+        $this->id_salle = $pIdSalle;
     }
 
     /**
      *
-     * @param mixed $numeroSalle
+     * @param mixed $pHoraireDebut
      */
-    public function setNumeroSalle($numeroSalle)
+    public function setHoraireDebut($pHoraireDebut)
     {
-        $this->numeroSalle = $numeroSalle;
+        $this->horaire_debut = $pHoraireDebut;
     }
 
     /**
      *
-     * @param mixed $descSalle
+     * @param mixed $pHoraireFin
      */
-    public function setDescSalle($descSalle)
+    public function setHoraireFin($pHoraireFin)
     {
-        $this->descSalle = $descSalle;
+        $this->horaire_fin = $pHoraireFin;
     }
 
-    /**
-     *
-     * @param mixed $prof
-     */
-    public function setProfs($profs)
-    {
-        $this->profs = $profs;
-    }
-
-    /**
-     *
-     * @param mixed $promo
-     */
-    public function setPromo($promo)
-    {
-        $this->promo = $promo;
-    }
-
-    /**
-     *
-     * @param mixed $dateDebut
-     */
-    public function setDateDebut($dateDebut)
-    {
-        $this->dateDebut = $dateDebut;
-    }
-
-    /**
-     *
-     * @param mixed $dateFin
-     */
-    public function setDateFin($dateFin)
-    {
-        $this->dateFin = $dateFin;
-    }
 }

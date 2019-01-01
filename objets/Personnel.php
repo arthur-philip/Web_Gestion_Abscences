@@ -8,6 +8,8 @@ class Personnel
 {
     private $id_personnel;
 
+    private $login;
+
     private $mdp;
 
     private $nom;
@@ -17,9 +19,10 @@ class Personnel
     private $id_responsabilite;
     
     // Constructeur de la classe
-    public function __construct($pIdPersonnel, $pMdp, $pNom, $pPrenom, $pIdResponsabilite)
+    public function __construct($pIdPersonnel, $pLogin, $pMdp, $pNom, $pPrenom, $pIdResponsabilite)
     {
         $this->id_personnel = $pIdPersonnel;
+        $this->login = $pLogin;
         $this->mdp = $pMdp;
         $this->nom = $pNom;
         $this->prenom = $pPrenom;
@@ -68,6 +71,15 @@ class Personnel
      *
      * @return mixed
      */
+    public function getLogin()
+    {
+        return $this->login;
+    }
+
+    /**
+     *
+     * @return mixed
+     */
     public function getIdResponsabilite()
     {
         return $this->id_responsabilite;
@@ -107,6 +119,15 @@ class Personnel
     public function setMdp($pMdp)
     {
         $this->mdp = $pMdp;
+    }
+
+    /**
+     *
+     * @param mixed $pLogin
+     */
+    public function setLogin($pLogin)
+    {
+        $this->login = $pLogin;
     }
 
     /**

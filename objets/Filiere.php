@@ -62,7 +62,7 @@ class Filiere
      *
      * @return mixed
      */
-    public function getIdLibelle()
+    public function getLibelle()
     {
         return $this->libelle;
     }
@@ -71,7 +71,7 @@ class Filiere
      *
      * @param mixed $id filiere
      */
-    public function setIdLibelle($lib)
+    public function setLibelle($lib)
     {
         $this->libelle = $lib;
     }
