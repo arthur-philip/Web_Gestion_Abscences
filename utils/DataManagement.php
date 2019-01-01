@@ -2,7 +2,7 @@
 /**
  * Classe qui contient toutes les fonctions dont le site a besoin pour utiliser la base de données.
  *
- * @author Thibault KUZMYCZ, Jordan PEDRERO, Arthur PHILIP
+ * @author thibault.kuzmycz, jordan.pedrero, arthur.philip
  */
 class DataManagement
 {
@@ -32,8 +32,7 @@ class DataManagement
     public function insertAbscence($abscence)
     {
         // Remplis la table Abscence
-        $reqInsAbs = $this->db->prepare("INSERT INTO abscence (id_cours, ine_etudiant)
-            VALUES (:idCours, :ineEtudiant)");
+        $reqInsAbs = $this->db->prepare("INSERT INTO abscence (id_cours, ine_etudiant) VALUES (:idCours, :ineEtudiant)");
         $reqInsAbs->bindValue(':idCours', $abscence->id_cours);
         $reqInsAbs->bindValue(':ineEtudiant', $abscence->$ine);
         $reqInsAbs->execute();
@@ -79,8 +78,7 @@ class DataManagement
     public function insertDepartement($departement)
     {
         // Remplis la table Departement
-        $reqInsDept = $this->db->prepare("INSERT INTO departement (libelle)
-            VALUES (:libelleDepart)");
+        $reqInsDept = $this->db->prepare("INSERT INTO departement (libelle) VALUES (:libelleDepart)");
         $reqInsDept->bindValue(':libelleDepart', $departement->libelle);
         $reqInsDept->execute();
     }
@@ -93,8 +91,7 @@ class DataManagement
     public function insertEtudiant($etudiant)
     {
         // Remplis la table Etudiant
-        $reqInsEtu = $this->db->prepare("INSERT INTO etudiant (ine_etudiant, id_groupe, nom, prenom)
-            VALUES (:ineEtudiant, :idGroupe, :nom, :prenom)");
+        $reqInsEtu = $this->db->prepare("INSERT INTO etudiant (ine_etudiant, id_groupe, nom, prenom) VALUES (:ineEtudiant, :idGroupe, :nom, :prenom)");
         $reqInsEtu->bindValue(':ineEtudiant', $etudiant->$ine);
         $reqInsEtu->bindValue(':idGroupe', $etudiant->$id_groupe);
         $reqInsEtu->bindValue(':nom', $etudiant->$nom);
@@ -110,8 +107,7 @@ class DataManagement
     public function insertFiliere($filiere)
     {
         // Remplis la table Filiere
-        $reqInsFil = $this->db->prepare("INSERT INTO filiere (id_departement, libelle)
-            VALUES (:idDepartement, :libelle)");
+        $reqInsFil = $this->db->prepare("INSERT INTO filiere (id_departement, libelle) VALUES (:idDepartement, :libelle)");
         $reqInsFil->bindValue(':idDepartement', $filiere->$id_dep);
         $reqInsFil->bindValue(':libelle', $filiere->$libelle);
         $reqInsFil->execute();
@@ -125,8 +121,7 @@ class DataManagement
     public function insertGroupe($groupe)
     {
         // Remplis la table Groupe
-        $reqInsGro = $this->db->prepare("INSERT INTO groupe (id_filiere, libelle)
-            VALUES (:idFiliere, :libelle)");
+        $reqInsGro = $this->db->prepare("INSERT INTO groupe (id_filiere, libelle) VALUES (:idFiliere, :libelle)");
         $reqInsGro->bindValue(':idFiliere', $groupe->$id_filiere);
         $reqInsGro->bindValue(':libelle', $groupe->$libelle);
         $reqInsGro->execute();
@@ -142,8 +137,7 @@ class DataManagement
     public function insertMatiere($matiere)
     {
         // Remplis la table Matiere
-        $reqInsMat = $this->db->prepare("INSERT INTO matiere (libelle)
-            VALUES (:libelle)");
+        $reqInsMat = $this->db->prepare("INSERT INTO matiere (libelle) VALUES (:libelle)");
         $reqInsMat->bindValue(':libelle', $matiere->$libelle);
         $reqInsMat->execute();
     }
@@ -156,8 +150,7 @@ class DataManagement
     public function insertPersonnel($personnel)
     {
         // Remplis la table Personnel
-        $reqInsPer = $this->db->prepare("INSERT INTO personnel (login, mdp, nom, prenom, id_responsabilite)
-            VALUES (:login, :mdp, :nom, prenom, id_responsabilite)");
+        $reqInsPer = $this->db->prepare("INSERT INTO personnel (login, mdp, nom, prenom, id_responsabilite) VALUES (:login, :mdp, :nom, prenom, id_responsabilite)");
         $reqInsPer->bindValue(':login', $personnel->$login);
         $reqInsPer->bindValue(':mdp', $personnel->$mdp);
         $reqInsPer->bindValue(':nom', $personnel->$nom);
@@ -173,9 +166,8 @@ class DataManagement
     */
     public function insertResponsabilite($responsabilite)
     {
-        // Remplis la table Salle
-        $reqInsRes = $this->db->prepare("INSERT INTO responsabilite (libelle)
-            VALUES (:libelle)");
+        // Remplis la table Responsabilite
+        $reqInsRes = $this->db->prepare("INSERT INTO responsabilite (libelle) VALUES (:libelle)");
         $reqInsRes->bindValue(':libelle', $responsabilite->$libelle);
         $reqInsRes->execute();
     }
@@ -188,17 +180,65 @@ class DataManagement
     public function insertSalle($salle)
     {
         // Remplis la table Salle
-        $reqInsMat = $this->db->prepare("INSERT INTO salle (libelle)
-            VALUES (:libelle)");
-        $reqInsMat->bindValue(':libelle', $salle->$libelle);
-        $reqInsMat->execute();
+        $reqInsSal = $this->db->prepare("INSERT INTO salle (libelle) VALUES (:libelle)");
+        $reqInsSal->bindValue(':libelle', $salle->$libelle);
+        $reqInsSal->execute();
     }
 
     //----------UPDATE----------\\
 
+    /**
+     * Mise à jour d'une abscence en base de données.
+     *
+     * @param $abscence L'abscence à mettre à jour dans la base de données.
+    */
+    public function updateAbscence($abscence)
+    {
+        // Mise à jour de la table Abscence
+        $reqUpdAbs = $this->db->prepare("UPDATE abscence SET id_cours = :idCours, ine_etudiant = :ineEtudiant WHERE id_abscence = :idAbscence");
+        $reqUpdAbs->bindValue(':idAbscence', $abscence->$id_abscence);
+        $reqUpdAbs->bindValue(':idCours', $abscence->$id_cours);
+        $reqUpdAbs->bindValue(':ineEtudiant', $abscence->$ine);
+        $reqUpdAbs->execute();
+    }
+
     //----------DELETE----------\\
 
+    /**
+     * Suppression d'une abscence en base de données.
+     *
+     * @param $abscence L'abscence à supprimer de la base de données.
+    */
+    public function deleteAbscence($abscence)
+    {
+        // Mise à jour de la table Abscence
+        $reqDelAbs = $this->db->prepare("DELETE FROM abscence WHERE id_abscence = :idAbscence");
+        $reqDelAbs->bindValue(':idAbscence', $abscence->$id_abscence);
+        $reqDelAbs->execute();
+    }
+
     //----------SELECT----------\\
+
+    /**
+     * Selection de toutes les abscences en base de données.
+     *
+     * @param $abscence L'abscence à supprimer de la base de données.
+    */
+    public function selectAllAbscence()
+    {
+        // Mise à jour de la table Abscence
+        $reqSelAllAbs = $this->db->prepare("SELECT * FROM abscence");
+        if ($reqSelAllAbs->execute()) {
+            // Si les informations sont correctes (au moins un résultat trouvé)
+            for ($cpt=0; $ligne=$reqCheckUser->fetch(); $cpt++) {
+                // On renvoit les infos de l'utilisateur (nom, prénom, responsabilité)
+                $data[$cpt] = $ligne;
+            }
+        }
+        return $data;
+    }
+
+    //----------AUTRES----------\\
 
     /**
      * Vérification de l'existance d'un utilisateur dans la base de donnée.
