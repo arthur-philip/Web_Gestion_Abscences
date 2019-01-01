@@ -8,17 +8,14 @@ class Etudiant
 {
     private $ine;
 
-    private $id_groupe;
-
     private $nom;
 
     private $prenom;
     
     // Constructeur de la classe
-    public function __construct($pine, $pid_groupe, $pnom, $pprenom)
+    public function __construct($pine, $pnom, $pprenom)
     {
         $this->ine = $pine;
-        $this->id_groupe = $pid_groupe;
         $this->nom = $pnom;
         $this->prenom = $pprenom;
     }
@@ -78,22 +75,5 @@ class Etudiant
     {
         $this->prenom = $prenom;
     }
-
-    /**
-     *
-     * @return mixed
-     */
-    public function getIdGroupe()
-    {
-        return $this->id_groupe;
-    }
- 
-    /**
-     *
-     * @param mixed $id filiere
-     */
-    public function setIdGroupe($id_groupe)
-    {
-        $this->id_groupe = $id_groupe;
-    }
+    
 }

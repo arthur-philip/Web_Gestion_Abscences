@@ -1,0 +1,23 @@
+GROUPE_ETUDIANT, 0N GROUPE, 0N ETUDIANT: id_groupe, ine_etudiant
+GROUPE: id_groupe, id_filiere, libelle
+DF1, 0N FILIERE, 11 GROUPE
+FILIERE: id_filiere, id_departement, libelle
+DF2, 0N DEPARTEMENT, 11 FILIERE
+DEPARTEMENT: id_departement, libelle
+
+COURS_GROUPE, 0N COURS, 0N GROUPE: id_cours, id_groupe
+:
+
+ETUDIANT: ine_etudiant, nom, prenom
+ABSCENCE, 0N ETUDIANT, 0N COURS: id_abscence, id_cours, ine_etudiant
+COURS: id_cours, id_matiere, id_salle, horaire_debut, horaire_fin
+ANIME, 0N COURS, 0N PERSONNEL: id_cours, id_personnel
+PERSONNEL: id_personnel, login, mdp, nom, prenom, id_responsabilite
+
+DF3, 11 COURS, 0N SALLE
+DF4, 11 COURS, 0N MATIERE
+DF5, 0N RESPONSABILITE, 11 PERSONNEL
+
+SALLE: id_salle, libelle
+MATIERE: id_matiere, libelle
+RESPONSABILITE: id_responsabilite, libelle
