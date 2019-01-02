@@ -1,7 +1,7 @@
 <?php
 
-    // Si le formulaire a été rempli.
-    if (isset($_POST['createAdmin_login']) && isset($_POST['createAdmin_mdp']) && isset($_POST['createAdmin_nom']) && isset($_POST['createAdmin_prenom']) && isset($_POST['createAdmin_resp'])) {
+    // Formulaire de création d'un administratif.
+    if (isset($_POST['createAdmin_login']) && isset($_POST['createAdmin_mdp']) && isset($_POST['createAdmin_nom']) && isset($_POST['createAdmin_prenom'])) {
 
         // Connexion à la base de données.
         try {
@@ -11,15 +11,15 @@
             header('Location: erreur?erreur=Connexion à la base de donnée impossible');
             exit();
         }
-        // Récuparation des informations du formulaire.
+        // Récupération des informations du formulaire.
         $createAdmin_login = htmlspecialchars($_POST['createAdmin_login']);
         $createAdmin_mdp = htmlspecialchars($_POST['createAdmin_mdp']);
         $createAdmin_nom = htmlspecialchars($_POST['createAdmin_nom']);
         $createAdmin_prenom = htmlspecialchars($_POST['createAdmin_prenom']);
-        $createAdmin_resp = htmlspecialchars($_POST['createAdmin_resp']);
         
         // Création d'un nouveau membre du personnel avec ces informations.
-        $newPerso = new Personnel(null, $createAdmin_login, $createAdmin_mdp, $createAdmin_nom, $createAdmin_prenom, $createAdmin_resp);
+        $newPerso = new Personnel(null, $createAdmin_login, $createAdmin_mdp, $createAdmin_nom, $createAdmin_prenom, $resp_administratif);
+
         // On vérifie que ce login n'est pas déjà utilisé.
         try {
             // On cherche en base de données.
@@ -44,6 +44,7 @@
             $createAdmin_mdp = "";
             $createAdmin_nom = "";
             $createAdmin_prenom = "";
+            unset($_POST);
         } else {
             // On affiche une erreur.
             echo "<script>alert('Ce login est déjà utilisé, veuillez en choisir un autre.');</script>";
@@ -51,10 +52,10 @@
     }
 ?>
 <section>
+    <h2 class="toggleNext">Panel administrateur</h2>
     <div>
-        <h2>Panel administrateur</h2>
         <h3>Création d'un administratif</h3>
-        <form method="POST" action="index.php">
+        <form method="POST" action="index">
             <p>Login</p>
             <input type="text" name="createAdmin_login" value="<?php if (isset($createAdmin_login)) {
     echo $createAdmin_login;
@@ -71,8 +72,6 @@
             <input type="text" name="createAdmin_prenom" value="<?php if (isset($createAdmin_prenom)) {
     echo $createAdmin_prenom;
 } ?>">
-            <br><br>
-            <input type="hidden" name="createAdmin_resp" value="<?php echo $resp_administratif;?>">
             <input type="submit" value="Créer">
         </form>
     </div>
