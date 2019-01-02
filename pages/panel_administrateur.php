@@ -3,14 +3,6 @@
     // Formulaire de création d'un administratif.
     if (isset($_POST['createAdmin_login']) && isset($_POST['createAdmin_mdp']) && isset($_POST['createAdmin_nom']) && isset($_POST['createAdmin_prenom'])) {
 
-        // Connexion à la base de données.
-        try {
-            $dataManagement = new DataManagement();
-        } catch (Exception $e) {
-            // Redirection sur la page d'erreur en cas de problème.
-            header('Location: erreur?erreur=Connexion à la base de donnée impossible');
-            exit();
-        }
         // Récupération des informations du formulaire.
         $createAdmin_login = htmlspecialchars($_POST['createAdmin_login']);
         $createAdmin_mdp = htmlspecialchars($_POST['createAdmin_mdp']);

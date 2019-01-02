@@ -6,14 +6,6 @@
     // Formulaire de création d'un professeur.
     if (isset($_POST['createProf_login']) && isset($_POST['createProf_mdp']) && isset($_POST['createProf_nom']) && isset($_POST['createProf_prenom'])) {
 
-        // Connexion à la base de données.
-        try {
-            $dataManagement = new DataManagement();
-        } catch (Exception $e) {
-            // Redirection sur la page d'erreur en cas de problème.
-            header('Location: erreur?erreur=Connexion à la base de donnée impossible');
-            exit();
-        }
         // Récupération des informations du formulaire.
         $createProf_login = htmlspecialchars($_POST['createProf_login']);
         $createProf_mdp = htmlspecialchars($_POST['createProf_mdp']);
@@ -53,11 +45,34 @@
             echo "<script>alert('Ce login est déjà utilisé, veuillez en choisir un autre.');</script>";
         }
     }
+
+    // Formulaire de création d'un département.
+    if (isset($_POST['createDepart_nom'])) {
+        
+        // Récupération des informations du formulaire.
+        $createDepart_nom = htmlspecialchars($_POST['createDepart_nom']);
+
+        // Création d'un nouveau département avec ces informations.
+        $newDepart = new Departement(null, $createDepart_nom);
+
+        // Insérer le personnel en base de donnée.
+        try {
+            $dataManagement->insertDepartement($newDepart);
+        } catch (Exception $e) {
+            // Si probleme -> affiche une erreur et sort de la boucle.
+            echo "<script>alert('Erreur lors de la création du département.');</script>";
+            exit;
+        }
+        // Afficher un message confirmant l'insertion et vider les valeurs du formulaire.
+        echo "<script>alert('Création du département réussie.');</script>";
+        $createDepart_nom = "";
+        unset($_POST);
+    }
 ?>
 <section>
     <?php
     //TODO:
-        //Création des départements, filières
+        //Création des filières
         //Importation des étudiants
         //Importation des plannings (Filière par filière)
         //Suppression d’un planning (Filière par filière)
@@ -70,25 +85,32 @@
             <form method="POST" action="index">
                 <p>Login</p>
                 <input type="text" name="createProf_login" value="<?php if (isset($createProf_login)) {
-            echo $createProf_login;
-        } ?>" required>
+        echo $createProf_login;
+    } ?>" required>
                 <p>Mot de passe</p>
                 <input type="password" name="createProf_mdp" value="<?php if (isset($createProf_mdp)) {
-            echo $createProf_mdp;
-        } ?>" required>
+        echo $createProf_mdp;
+    } ?>" required>
                 <p>Nom</p>
                 <input type="text" name="createProf_nom" value="<?php if (isset($createProf_nom)) {
-            echo $createProf_nom;
-        } ?>">
+        echo $createProf_nom;
+    } ?>">
                 <p>Prenom</p>
                 <input type="text" name="createProf_prenom" value="<?php if (isset($createProf_prenom)) {
-            echo $createProf_prenom;
-        } ?>">
+        echo $createProf_prenom;
+    } ?>">
                 <input type="submit" value="Créer">
             </form>
         </div>
         <div>
             <h3>Création d'un département</h3>
+            <form method="POST" action="index">
+                <p>Nom</p>
+                <input type="text" name="createDepart_nom" value="<?php if (isset($createDepart_nom)) {
+        echo $createProf_nom;
+    } ?>">
+                <input type="submit" value="Créer">
+            </form>
         </div>
         <div>
             <h3>Création d'une filière</h3>
