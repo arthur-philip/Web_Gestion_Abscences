@@ -15,6 +15,31 @@
         </div>
         <div>
             <h3>Liste des abscences</h3>
+            <form>
+                <p>Département</p>
+                <select>
+                    <?php
+                        // TODO: option pour chaque département
+                    ?>
+                </select>
+                <p>Filière</p>
+                <select>
+                    <?php
+                        // TODO: option pour chaque filière en fonction du département
+                    ?>
+                </select>
+                <p>Groupe</p>
+                <select>
+                    <?php
+                        // TODO: option pour chaque groupe en fonction de la filière
+                    ?>
+                </select>
+                <ul>
+                    <?php
+                        // TODO: Liste des abscences (étudiant/matière/date)
+                    ?>
+                </ul>
+            </form>
         </div>
     </div>
 </div>

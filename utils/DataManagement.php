@@ -220,7 +220,7 @@ class DataManagement
     /**
      * Selection des abscences d'un étudiant de la base de données.
      *
-     * @param $etudiant L'étudiant dont on chercher les abscences.
+     * @param $etudiant L'étudiant dont on cherche les abscences.
      * @return $data Tableau contenant toutes les abscences de l'étudiant.
     */
     public function selectAbscenceByEtudiant(Etudiant $etudiant)
@@ -270,6 +270,44 @@ class DataManagement
             // Si les informations sont correctes (au moins un résultat trouvé)
             for ($cpt=0; $ligne=$reqSelAllDep->fetch(); $cpt++) {
                 $data[$cpt] = new Departement($ligne["id_departement"], $ligne["libelle"]);
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * Selection de toutes les filières d'un département en base de données.
+     *
+     * @param $departement Le département dont on cherche les filières.
+     * @return $data Tableau contenant toutes les filières du département.
+    */
+    public function selectAllFiliereByDepartement(Departement $departement){
+        $data = [];
+        // Lecture la table Filiere
+        $reqSelAllFilByDep = $this->db->prepare("SELECT * FROM filiere WHERE id_departement = ?");
+        if ($reqSelAllFilByDep->execute(array($departement->getIdDepartement()))) {
+            // Si les informations sont correctes (au moins un résultat trouvé)
+            for ($cpt=0; $ligne=$reqSelAllFilByDep->fetch(); $cpt++) {
+                $data[$cpt] = new Filiere($ligne["id_filiere"], $ligne["id_departement"], $ligne["libelle"]);
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * Selection de tous les groupes d'une filière en base de données.
+     *
+     * @param $filiere La filière dont on cherche les groupes.
+     * @return $data Tableau contenant touts les groupes de la filière.
+    */
+    public function selectAllGroupeByFiliere(Filiere $filiere){
+        $data = [];
+        // Lecture la table Groupe
+        $reqSelAllGroByFil = $this->db->prepare("SELECT * FROM groupe WHERE id_filiere = ?");
+        if ($reqSelAllGroByFil->execute(array($filiere->getIdFiliere()))) {
+            // Si les informations sont correctes (au moins un résultat trouvé)
+            for ($cpt=0; $ligne=$reqSelAllGroByFil->fetch(); $cpt++) {
+                $data[$cpt] = new Groupe($ligne["libelle"], $ligne["id_groupe"], $ligne["id_filiere"]);
             }
         }
         return $data;
