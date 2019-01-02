@@ -239,6 +239,25 @@ class DataManagement
     }
 
     /**
+     * Selection de touts les départements de la base de données.
+     *
+     * @return $data Tableau contenant toutes les abscences.
+    */
+    public function selectAllDepartement()
+    {
+        $data = [];
+        // Lecture la table Departement
+        $reqSelAllDep = $this->db->prepare("SELECT * FROM departement");
+        if ($reqSelAllDep->execute()) {
+            // Si les informations sont correctes (au moins un résultat trouvé)
+            for ($cpt=0; $ligne=$reqSelAllDep->fetch(); $cpt++) {
+                $data[$cpt] = new Departement($ligne["id_departement"], $ligne["libelle"]);
+            }
+        }
+        return $data;
+    }
+
+    /**
      * Selection d'un membre du personnel dans la base de données en utilisant son login.
      *
      * @param $personnel Le membre du personnel recherché.

@@ -1,6 +1,6 @@
 <?php
     session_start();
     session_destroy();
-    unset($_POST);
+    $_POST = array();
     header('Location: ../index');
     exit();

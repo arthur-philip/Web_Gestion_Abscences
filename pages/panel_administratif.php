@@ -39,7 +39,7 @@
             $createProf_mdp = "";
             $createProf_nom = "";
             $createProf_prenom = "";
-            unset($_POST);
+            $_POST = array();
         } else {
             // On affiche une erreur.
             echo "<script>alert('Ce login est déjà utilisé, veuillez en choisir un autre.');</script>";
@@ -55,7 +55,7 @@
         // Création d'un nouveau département avec ces informations.
         $newDepart = new Departement(null, $createDepart_nom);
 
-        // Insérer le personnel en base de donnée.
+        // Insérer le département en base de donnée.
         try {
             $dataManagement->insertDepartement($newDepart);
         } catch (Exception $e) {
@@ -66,13 +66,37 @@
         // Afficher un message confirmant l'insertion et vider les valeurs du formulaire.
         echo "<script>alert('Création du département réussie.');</script>";
         $createDepart_nom = "";
-        unset($_POST);
+        $_POST = array();
+    }
+
+    // Formulaire de création d'une filière.
+    if (isset($_POST['createFiliere_nom']) && isset($_POST['createFiliere_dep'])) {
+
+        // Récupération des informations du formulaire.
+        $createFiliere_nom = htmlspecialchars($_POST['createFiliere_nom']);
+        $createFiliere_dep = htmlspecialchars($_POST['createFiliere_dep']);
+
+        // Création d'une nouvelle filière avec ces informations.
+        $newFillere = new Filiere(null, $createFiliere_dep, $createFiliere_nom);
+
+        // Insérer le personnel en base de donnée.
+        try {
+            $dataManagement->insertFiliere($newFillere);
+        } catch (Exception $e) {
+            // Si probleme -> affiche une erreur et sort de la boucle.
+            echo "<script>alert('Erreur lors de la création de la filière.');</script>";
+            exit;
+        }
+        // Afficher un message confirmant l'insertion et vider les valeurs du formulaire.
+        echo "<script>alert('Création de la filière réussie.');</script>";
+        $createFiliere_nom = "";
+        $createFiliere_dep = "";
+        $_POST = array();
     }
 ?>
 <section>
     <?php
     //TODO:
-        //Création des filières
         //Importation des étudiants
         //Importation des plannings (Filière par filière)
         //Suppression d’un planning (Filière par filière)
@@ -107,13 +131,34 @@
             <form method="POST" action="index">
                 <p>Nom</p>
                 <input type="text" name="createDepart_nom" value="<?php if (isset($createDepart_nom)) {
-        echo $createProf_nom;
+        echo $createDepart_nom;
     } ?>">
                 <input type="submit" value="Créer">
             </form>
         </div>
         <div>
             <h3>Création d'une filière</h3>
+            <form method="POST" action="index">
+                <p>Nom</p>
+                <input type="text" name="createFiliere_nom" value="<?php if (isset($createFiliere_nom)) {
+        echo $createFiliere_nom;
+    } ?>">
+                <p>Département</p>
+                <select name="createFiliere_dep">
+                    <option value=""></option>
+                    <?php
+
+                        // On récupére tous les départements.
+                        $departements = $dataManagement->selectAllDepartement();
+                        
+                        // On crée une option pour chacun d'eux (avec son id en value).
+                        foreach ($departements as $dept) {
+                            print("<option value='".$dept->getIdDepartement()."'>".$dept->getLibelle()."</option>");
+                        }
+                    ?>
+                </select>
+                <input type="submit" value="Créer">
+            </form>
         </div>
         <div>
             <h3>Importations des étudiants et des plannings + suppression d'un planning</h3>

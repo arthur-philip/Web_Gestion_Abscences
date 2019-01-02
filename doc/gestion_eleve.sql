@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mar. 01 jan. 2019 à 20:32
+-- Généré le :  mer. 02 jan. 2019 à 15:41
 -- Version du serveur :  5.7.23
 -- Version de PHP :  7.2.10
 
@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS `departement` (
   `id_departement` int(10) NOT NULL AUTO_INCREMENT,
   `libelle` varchar(25) NOT NULL,
   PRIMARY KEY (`id_departement`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -126,7 +126,7 @@ CREATE TABLE IF NOT EXISTS `filiere` (
   `libelle` varchar(25) NOT NULL,
   PRIMARY KEY (`id_filiere`),
   KEY `filiere_departement_fk` (`id_departement`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -188,7 +188,7 @@ CREATE TABLE IF NOT EXISTS `personnel` (
   PRIMARY KEY (`id_personnel`),
   UNIQUE KEY `uniq_login` (`login`) USING BTREE,
   KEY `personnel_responsabilite_fk` (`id_responsabilite`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `personnel`
@@ -197,8 +197,7 @@ CREATE TABLE IF NOT EXISTS `personnel` (
 INSERT INTO `personnel` (`id_personnel`, `login`, `mdp`, `nom`, `prenom`, `id_responsabilite`) VALUES
 (1, 'admin', 'admin', '', '', 0),
 (2, 'administratif', 'administratif', '', '', 1),
-(3, 'prof', 'prof', '', '', 2),
-(4, '111111', '2222222', '', '', 1);
+(3, 'prof', 'prof', '', '', 2);
 
 -- --------------------------------------------------------
 

@@ -36,7 +36,7 @@
             $createAdmin_mdp = "";
             $createAdmin_nom = "";
             $createAdmin_prenom = "";
-            unset($_POST);
+            $_POST = array();
         } else {
             // On affiche une erreur.
             echo "<script>alert('Ce login est déjà utilisé, veuillez en choisir un autre.');</script>";
