@@ -96,11 +96,11 @@
 ?>
 <section>
     <?php
-    //TODO:
-        //Importation des étudiants
-        //Importation des plannings (Filière par filière)
-        //Suppression d’un planning (Filière par filière)
-        //Voir les listes associées (étudiants + matières)
+    // TODO:
+        // Importation des étudiants
+        // Importation des plannings (Filière par filière)
+        // Suppression d’un planning (Filière par filière)
+        // Voir les listes associées (étudiants + matières)
     ?>
     <h2 class="toggleNext">Panel administratif</h2>
     <div>

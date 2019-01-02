@@ -6,7 +6,6 @@
  */
 class DataManagement
 {
-
     // Définition de l'utilisateur avec lequel on va se connecter à la base de données.
     private $user = "site_user";
 
@@ -91,9 +90,8 @@ class DataManagement
     public function insertEtudiant(Etudiant $etudiant)
     {
         // Remplis la table Etudiant
-        $reqInsEtu = $this->db->prepare("INSERT INTO etudiant (ine_etudiant, id_groupe, nom, prenom) VALUES (:ineEtudiant, :idGroupe, :nom, :prenom)");
+        $reqInsEtu = $this->db->prepare("INSERT INTO etudiant (ine_etudiant, nom, prenom) VALUES (:ineEtudiant, :nom, :prenom)");
         $reqInsEtu->bindValue(':ineEtudiant', $etudiant->getINE());
-        $reqInsEtu->bindValue(':idGroupe', $etudiant->getIdGroupe());
         $reqInsEtu->bindValue(':nom', $etudiant->getNom());
         $reqInsEtu->bindValue(':prenom', $etudiant->getPrenom());
         $reqInsEtu->execute();
@@ -218,6 +216,26 @@ class DataManagement
     }
 
     //----------SELECT----------\\
+
+    /**
+     * Selection des abscences d'un étudiant de la base de données.
+     *
+     * @param $etudiant L'étudiant dont on chercher les abscences.
+     * @return $data Tableau contenant toutes les abscences de l'étudiant.
+    */
+    public function selectAbscenceByEtudiant(Etudiant $etudiant)
+    {
+        $data = [];
+        // Lecture la table Abscence
+        $reqSAbsByEtu = $this->db->prepare("SELECT * FROM abscence WHERE ine_etudiant = ?");
+        if ($reqSAbsByEtu->execute(array($etudiant->getINE()))) {
+            // Si les informations sont correctes (au moins un résultat trouvé)
+            for ($cpt=0; $ligne=$reqSAbsByEtu->fetch(); $cpt++) {
+                $data[$cpt] = new Abscence($ligne["id_abscence"], $ligne["ine_etudiant"], $ligne["id_cours"]);
+            }
+        }
+        return $data;
+    }
 
     /**
      * Selection de toutes les abscences de la base de données.
