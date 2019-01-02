@@ -20,39 +20,57 @@
         
         // Création d'un nouveau membre du personnel avec ces informations.
         $newPerso = new Personnel(null, $createAdmin_login, $createAdmin_mdp, $createAdmin_nom, $createAdmin_prenom, $createAdmin_resp);
-        // TODO: Vérifier que ce login n'est pas déjà utilisé
-
-        // insérer le personnel en bdd
-        try{
-            $dataManagement->insertPersonnel($newPerso);
-        } catch(Exception $e){
+        // On vérifie que ce login n'est pas déjà utilisé.
+        try {
+            // On cherche en base de données.
+            $exist = $dataManagement->selectPersonnelByLogin($newPerso);
+        } catch (Exception $e) {
             // si probleme -> affiche une erreur et sort de la boucle.
-            echo "<script>alert('Erreur lors de la création du personnel administratif.);</script>";
+            echo "<script>alert('Erreur lors de la vérification de l'existance du personnel administratif.');</script>";
             exit;
         }
-        // Afficher un message confirmant l'insertion et vide les valeurs du formulaire
-        echo "<script>alert('Création du personnel administratif réussie.);</script>";
-        $createAdmin_login = "";
-        $createAdmin_mdp = "";
-        $createAdmin_nom = "";
-        $createAdmin_prenom = "";
-        $createAdmin_resp = "";
+        if ($exist == null) {
+            // Insérer le personnel en base de donnée.
+            try {
+                $dataManagement->insertPersonnel($newPerso);
+            } catch (Exception $e) {
+                // Si probleme -> affiche une erreur et sort de la boucle.
+                echo "<script>alert('Erreur lors de la création du personnel administratif.');</script>";
+                exit;
+            }
+            // Afficher un message confirmant l'insertion et vider les valeurs du formulaire.
+            echo "<script>alert('Création du personnel administratif réussie.');</script>";
+            $createAdmin_login = "";
+            $createAdmin_mdp = "";
+            $createAdmin_nom = "";
+            $createAdmin_prenom = "";
+        } else {
+            // On affiche une erreur.
+            echo "<script>alert('Ce login est déjà utilisé, veuillez en choisir un autre.');</script>";
+        }
     }
-
 ?>
 <section>
     <div>
-    <h2>Panel administrateur</h2>
+        <h2>Panel administrateur</h2>
         <h3>Création d'un administratif</h3>
         <form method="POST" action="index.php">
             <p>Login</p>
-            <input type="text" name="createAdmin_login" value="<?php if (isset($createAdmin_login)) { echo $createAdmin_login; } ?>" required>
+            <input type="text" name="createAdmin_login" value="<?php if (isset($createAdmin_login)) {
+    echo $createAdmin_login;
+} ?>" required>
             <p>Mot de passe</p>
-            <input type="password" name="createAdmin_mdp" required>
+            <input type="password" name="createAdmin_mdp" value="<?php if (isset($createAdmin_mdp)) {
+    echo $createAdmin_mdp;
+} ?>" required>
             <p>Nom</p>
-            <input type="text" name="createAdmin_nom">
+            <input type="text" name="createAdmin_nom" value="<?php if (isset($createAdmin_nom)) {
+    echo $createAdmin_nom;
+} ?>">
             <p>Prenom</p>
-            <input type="text" name="createAdmin_prenom">
+            <input type="text" name="createAdmin_prenom" value="<?php if (isset($createAdmin_prenom)) {
+    echo $createAdmin_prenom;
+} ?>">
             <br><br>
             <input type="hidden" name="createAdmin_resp" value="<?php echo $resp_administratif;?>">
             <input type="submit" value="Créer">

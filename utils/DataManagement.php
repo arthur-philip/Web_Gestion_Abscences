@@ -220,23 +220,41 @@ class DataManagement
     //----------SELECT----------\\
 
     /**
-     * Selection de toutes les abscences en base de données.
+     * Selection de toutes les abscences de la base de données.
      *
-     * @param $abscence L'abscence à supprimer de la base de données.
+     * @return $data Tableau contenant toutes les abscences.
     */
     public function selectAllAbscence()
     {
         $data = [];
-        // Mise à jour de la table Abscence
+        // Lecture la table Abscence
         $reqSelAllAbs = $this->db->prepare("SELECT * FROM abscence");
         if ($reqSelAllAbs->execute()) {
             // Si les informations sont correctes (au moins un résultat trouvé)
             for ($cpt=0; $ligne=$reqSelAllAbs->fetch(); $cpt++) {
-                // On renvoit les infos de l'utilisateur (nom, prénom, responsabilité)
-                $data[$cpt] = $ligne;
+                $data[$cpt] = new Abscence($ligne["id_abscence"], $ligne["ine_etudiant"], $ligne["id_cours"]);
             }
         }
         return $data;
+    }
+
+    /**
+     * Selection d'un membre du personnel dans la base de données en utilisant son login.
+     *
+     * @param $personnel Le membre du personnel recherché.
+     * @return Personnel/null Renvoie toutes les données du membre du personnel si il existe déjà, null sinon.
+    */
+    public function selectPersonnelByLogin(Personnel $personnel)
+    {
+        // Lecture de la table Personnel
+        $reqSelPer = $this->db->prepare("SELECT * FROM personnel WHERE login = ?");
+        if ($reqSelPer->execute(array($personnel->getLogin()))) {
+            // Si les informations sont correctes (au moins un résultat trouvé)
+            while ($ligne=$reqSelPer->fetch()) {
+                return new Personnel($ligne["id_personnel"], $ligne["login"], $ligne["mdp"], $ligne["nom"], $ligne["prenom"], $ligne["id_responsabilite"]);
+            }
+        }
+        return null;
     }
 
     //----------AUTRES----------\\
