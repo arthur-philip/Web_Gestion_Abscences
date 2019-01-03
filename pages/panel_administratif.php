@@ -145,7 +145,7 @@
     } ?>">
                 <p>Département</p>
                 <select name="createFiliere_dep">
-                    <option value=""></option>
+                <option value=""></option>
                     <?php
 
                         // On récupére tous les départements.
@@ -153,7 +153,11 @@
                         
                         // On crée une option pour chacun d'eux (avec son id en value).
                         foreach ($departements as $dept) {
-                            print("<option value='".$dept->getIdDepartement()."'>".$dept->getLibelle()."</option>");
+                            if(isset($createFiliere_dep) && $dept->getIdDepartement() == $createFiliere_dep){
+                                print("<option selected='selected' value='".$dept->getIdDepartement()."'>".$dept->getLibelle()."</option>");
+                            }else{
+                                print("<option value='".$dept->getIdDepartement()."'>".$dept->getLibelle()."</option>");
+                            }
                         }
                     ?>
                 </select>

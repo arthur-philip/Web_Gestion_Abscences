@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mer. 02 jan. 2019 à 15:41
+-- Généré le :  jeu. 03 jan. 2019 à 22:33
 -- Version du serveur :  5.7.23
 -- Version de PHP :  7.2.10
 
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `abscence` (
   PRIMARY KEY (`id_abscence`),
   KEY `abscence_cours_fk` (`id_cours`),
   KEY `abscence_etudiant_fk` (`ine_etudiant`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -64,12 +64,12 @@ CREATE TABLE IF NOT EXISTS `cours` (
   `id_cours` int(10) NOT NULL AUTO_INCREMENT,
   `id_matiere` int(10) NOT NULL,
   `id_salle` int(10) NOT NULL,
-  `horaire_debut` date NOT NULL,
-  `horaire_fin` date NOT NULL,
+  `horaire_debut` datetime NOT NULL,
+  `horaire_fin` datetime NOT NULL,
   PRIMARY KEY (`id_cours`),
   KEY `cours_matiere_fk` (`id_matiere`),
   KEY `cours_salle_fk` (`id_salle`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS `departement` (
   `id_departement` int(10) NOT NULL AUTO_INCREMENT,
   `libelle` varchar(25) NOT NULL,
   PRIMARY KEY (`id_departement`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -108,9 +108,10 @@ CREATE TABLE IF NOT EXISTS `departement` (
 DROP TABLE IF EXISTS `etudiant`;
 CREATE TABLE IF NOT EXISTS `etudiant` (
   `ine_etudiant` varchar(11) NOT NULL,
-  `nom` int(25) NOT NULL,
-  `prenom` int(25) NOT NULL,
-  PRIMARY KEY (`ine_etudiant`)
+  `nom` varchar(25) NOT NULL,
+  `prenom` varchar(25) NOT NULL,
+  PRIMARY KEY (`ine_etudiant`),
+  UNIQUE KEY `nom` (`nom`,`prenom`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -126,7 +127,7 @@ CREATE TABLE IF NOT EXISTS `filiere` (
   `libelle` varchar(25) NOT NULL,
   PRIMARY KEY (`id_filiere`),
   KEY `filiere_departement_fk` (`id_departement`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -141,7 +142,7 @@ CREATE TABLE IF NOT EXISTS `groupe` (
   `libelle` varchar(25) NOT NULL,
   PRIMARY KEY (`id_groupe`),
   KEY `groupe_filiere_fk` (`id_filiere`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -156,7 +157,7 @@ CREATE TABLE IF NOT EXISTS `groupe_etudiant` (
   PRIMARY KEY (`id_groupe`,`ine_etudiant`) USING BTREE,
   UNIQUE KEY `groupe_etudiant_ine_etudiant_fk` (`ine_etudiant`),
   KEY `groupe_etudiant_id_groupe_fk` (`id_groupe`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -169,7 +170,7 @@ CREATE TABLE IF NOT EXISTS `matiere` (
   `id_matiere` int(10) NOT NULL AUTO_INCREMENT,
   `libelle` varchar(50) NOT NULL,
   PRIMARY KEY (`id_matiere`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -232,7 +233,7 @@ CREATE TABLE IF NOT EXISTS `salle` (
   `id_salle` int(10) NOT NULL AUTO_INCREMENT,
   `libelle` varchar(10) NOT NULL,
   PRIMARY KEY (`id_salle`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 --
 -- Contraintes pour les tables déchargées

@@ -246,11 +246,16 @@ class DataManagement
     {
         $data = [];
         // Lecture la table Abscence
-        $reqSelAllAbs = $this->db->prepare("SELECT * FROM abscence");
+        $reqSelAllAbs = $this->db->prepare("SELECT etu.nom, etu.prenom, mat.libelle, cou.horaire_debut 
+                                            FROM abscence abs, cours cou, cours_groupe cougro, etudiant etu, groupe gro, groupe_etudiant groetu, matiere mat 
+                                            WHERE gro.id_groupe = cougro.id_groupe AND gro.id_groupe = groetu.id_groupe
+                                            AND etu.ine_etudiant = groetu.ine_etudiant AND etu.ine_etudiant = abs.ine_etudiant
+                                            AND cou.id_cours = cougro.id_cours AND cou.id_cours = abs.id_cours
+                                            AND mat.id_matiere = cou.id_matiere");
         if ($reqSelAllAbs->execute()) {
             // Si les informations sont correctes (au moins un résultat trouvé)
             for ($cpt=0; $ligne=$reqSelAllAbs->fetch(); $cpt++) {
-                $data[$cpt] = new Abscence($ligne["id_abscence"], $ligne["ine_etudiant"], $ligne["id_cours"]);
+                $data[$cpt] = [$ligne["nom"], $ligne["prenom"], $ligne["libelle"], $ligne["horaire_debut"]];
             }
         }
         return $data;
@@ -281,11 +286,11 @@ class DataManagement
      * @param $departement Le département dont on cherche les filières.
      * @return $data Tableau contenant toutes les filières du département.
     */
-    public function selectAllFiliereByDepartement(Departement $departement){
+    public function selectAllFiliereByDepartement($departement){
         $data = [];
         // Lecture la table Filiere
         $reqSelAllFilByDep = $this->db->prepare("SELECT * FROM filiere WHERE id_departement = ?");
-        if ($reqSelAllFilByDep->execute(array($departement->getIdDepartement()))) {
+        if ($reqSelAllFilByDep->execute(array($departement))) {
             // Si les informations sont correctes (au moins un résultat trouvé)
             for ($cpt=0; $ligne=$reqSelAllFilByDep->fetch(); $cpt++) {
                 $data[$cpt] = new Filiere($ligne["id_filiere"], $ligne["id_departement"], $ligne["libelle"]);
@@ -300,14 +305,15 @@ class DataManagement
      * @param $filiere La filière dont on cherche les groupes.
      * @return $data Tableau contenant touts les groupes de la filière.
     */
-    public function selectAllGroupeByFiliere(Filiere $filiere){
-        $data = [];
+    public function selectAllGroupeByFiliere($filiere){
+        //$data = [];
         // Lecture la table Groupe
         $reqSelAllGroByFil = $this->db->prepare("SELECT * FROM groupe WHERE id_filiere = ?");
-        if ($reqSelAllGroByFil->execute(array($filiere->getIdFiliere()))) {
+        if ($reqSelAllGroByFil->execute(array($filiere))) {
             // Si les informations sont correctes (au moins un résultat trouvé)
             for ($cpt=0; $ligne=$reqSelAllGroByFil->fetch(); $cpt++) {
-                $data[$cpt] = new Groupe($ligne["libelle"], $ligne["id_groupe"], $ligne["id_filiere"]);
+                //$data[$cpt] = new Groupe($ligne["id_groupe"], $ligne["id_filiere"], $ligne["libelle"]);
+                $data[$cpt] = [$ligne["id_groupe"], $ligne["id_filiere"], $ligne["libelle"]];
             }
         }
         return $data;

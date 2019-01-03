@@ -13,7 +13,7 @@ class Groupe
     private $libelle;
 
     // Constructeur de la classe
-    public function __construct($plibelle, $pid_groupe, $pid_filiere)
+    public function __construct($pid_groupe, $pid_filiere, $plibelle)
     {
         $this->libelle = $plibelle;
         $this->id_groupe = $pid_groupe;
