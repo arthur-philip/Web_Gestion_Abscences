@@ -1,50 +1,50 @@
 <?php
 
-// Formulaire d'affichage des abscences en fonction du département, de la filière et du groupe.
-if (isset($_POST['listeAbscence_dept']) && trim($_POST['listeAbscence_dept']) != "") {
+// Formulaire d'affichage des absences en fonction du département, de la filière et du groupe.
+if (isset($_POST['listeAbsence_dept']) && trim($_POST['listeAbsence_dept']) != "") {
     
     // On prend l'id du département choisi.
-    $idDepartement = htmlspecialchars($_POST['listeAbscence_dept']);
+    $idDepartement = htmlspecialchars($_POST['listeAbsence_dept']);
 
     // Si une filière a étée choisie préalablement.
-    if (isset($_POST['listeAbscence_filiere']) && trim($_POST['listeAbscence_filiere']) != "") {
+    if (isset($_POST['listeAbsence_filiere']) && trim($_POST['listeAbsence_filiere']) != "") {
 
         // On prend l'id de la filiere choisie.
-        $idFiliere = htmlspecialchars($_POST['listeAbscence_filiere']);
+        $idFiliere = htmlspecialchars($_POST['listeAbsence_filiere']);
 
-        if (isset($_POST['listeAbscence_groupe']) && trim($_POST['listeAbscence_groupe']) != "") {
+        if (isset($_POST['listeAbsence_groupe']) && trim($_POST['listeAbsence_groupe']) != "") {
 
             // On prend l'id du groupe choisi.
-            $idGroupe = htmlspecialchars($_POST['listeAbscence_groupe']);
+            $idGroupe = htmlspecialchars($_POST['listeAbsence_groupe']);
         }
     }
 }
 
-if (isset($_POST['listeAbscence_etudiant']) && trim($_POST['listeAbscence_etudiant']) != "") {
-    $listeAbscence_etudiant = htmlspecialchars($_POST['listeAbscence_etudiant']);
+if (isset($_POST['listeAbsence_etudiant']) && trim($_POST['listeAbsence_etudiant']) != "") {
+    $listeAbsence_etudiant = htmlspecialchars($_POST['listeAbsence_etudiant']);
 }
 
-if (isset($_POST['abscence_etudiant']) && trim($_POST['abscence_etudiant']) != "") {
-    $abscence_etudiant = htmlspecialchars($_POST['abscence_etudiant']);
-    $etudiant = explode(" ", $abscence_etudiant);
+if (isset($_POST['absence_etudiant']) && trim($_POST['absence_etudiant']) != "") {
+    $absence_etudiant = htmlspecialchars($_POST['absence_etudiant']);
+    $etudiant = explode(" ", $absence_etudiant);
     // Récup l'étudiant
     $completeEtudiant = $dataManagement->selectEtudiantByNomPrenom($etudiant[0], $etudiant[1]);
 }
 
-if (isset($_POST['abscence_cours']) && trim($_POST['abscence_cours']) != "") {
+if (isset($_POST['absence_cours']) && trim($_POST['absence_cours']) != "") {
     // On récupère les valeurs du cours et de l'étudiant.
-    $abscence_cours = explode("-", htmlspecialchars($_POST['abscence_cours']));
+    $absence_cours = explode("-", htmlspecialchars($_POST['absence_cours']));
 
     // Créer l'absence
     try {
-        $dataManagement->insertAbscence($abscence_cours[1], $abscence_cours[0]);
+        $dataManagement->insertAbsence($absence_cours[1], $absence_cours[0]);
     } catch (Exception $e) {
         // Si probleme -> affiche une erreur et sort de la boucle.
-        echo "<script>alert('Erreur lors de la création de l'abscence'.');</script>";
+        echo "<script>alert('Erreur lors de la création de l'absence'.');</script>";
         exit;
     }
     // Afficher un message confirmant l'insertion
-    echo "<script>alert('Création de l'abscence réussie.');</script>";
+    echo "<script>alert('Création de l'absence réussie.');</script>";
 }
 
 ?>
@@ -52,17 +52,17 @@ if (isset($_POST['abscence_cours']) && trim($_POST['abscence_cours']) != "") {
     <h2 class="toggleNext">Panel professeur</h2>
     <div>
         <div>
-            <h3>Saisie d'une abscence</h3>
+            <h3>Saisie d'une absence</h3>
             <form method="POST" action="index">
                 Étudiant :
-                <input type="text" name="abscence_etudiant" placeholder="Nom Prénom" value="<?php if (isset($abscence_etudiant)) {
-    echo $abscence_etudiant;
+                <input type="text" name="absence_etudiant" placeholder="Nom Prénom" value="<?php if (isset($absence_etudiant)) {
+    echo $absence_etudiant;
 }?>">
                 <input type="submit" value="Rechercher">
             </form>
             <form method="POST" action="index">
                 Cours :
-                <select name="abscence_cours">
+                <select name="absence_cours">
                     <option value=""></option>
                     <?php
                         // TODO: maj avec AJAX quand on saisi un étudiant.
@@ -74,7 +74,7 @@ if (isset($_POST['abscence_cours']) && trim($_POST['abscence_cours']) != "") {
                             // On crée une option pour chacun d'eux (avec son id en value).
                             foreach ($cours as $cour) {
                                 $libelle = $cour[0]." en ".$cour[1]." : ".$cour[2]." - ".$cour[3];
-                                if (isset($abscence_cours) && $cour["id_cours"] == $abscence_cours) {
+                                if (isset($absence_cours) && $cour["id_cours"] == $absence_cours) {
                                     print("<option selected='selected' value='".$cour[4]."-".$completeEtudiant[0]."'>".$libelle."</option>");
                                 } else {
                                     print("<option value='".$cour[4]."-".$completeEtudiant[0]."'>".$libelle."</option>");
@@ -88,14 +88,14 @@ if (isset($_POST['abscence_cours']) && trim($_POST['abscence_cours']) != "") {
             
         </div>
         <div>
-            <h3>Liste des abscences</h3>
+            <h3>Liste des absences</h3>
             <form method="POST" action="index">
                 Étudiant :
-                <input type="text" name="listeAbscence_etudiant" placeholder="Nom Prénom" value="<?php if (isset($listeAbscence_etudiant)) {
-                        echo $listeAbscence_etudiant;
+                <input type="text" name="listeAbsence_etudiant" placeholder="Nom Prénom" value="<?php if (isset($listeAbsence_etudiant)) {
+                        echo $listeAbsence_etudiant;
                     }?>">
                 Département :
-                <select name="listeAbscence_dept">
+                <select name="listeAbsence_dept">
                     <option value=""></option>
                     <?php
                         // On récupére tous les départements.
@@ -112,7 +112,7 @@ if (isset($_POST['abscence_cours']) && trim($_POST['abscence_cours']) != "") {
                     ?>
                 </select>
                 Filière :
-                <select name="listeAbscence_filiere">
+                <select name="listeAbsence_filiere">
                     <option value=""></option>
                     <?php
                         // TODO: maj avec AJAX quand on choisi un département.
@@ -132,7 +132,7 @@ if (isset($_POST['abscence_cours']) && trim($_POST['abscence_cours']) != "") {
                     ?>
                 </select>
                 Groupe :
-                <select name="listeAbscence_groupe">
+                <select name="listeAbsence_groupe">
                     <option value=""></option>
                     <?php
                         // TODO: maj avec AJAX quand on choisi une filière.
@@ -155,7 +155,7 @@ if (isset($_POST['abscence_cours']) && trim($_POST['abscence_cours']) != "") {
                 <input type="submit" value="Rechercher">
             </form>
             <?php
-                if (isset($_POST['listeAbscence_dept']) || isset($_POST['listeAbscence_filiere']) || isset($_POST['listeAbscence_groupe'])) {
+                if (isset($_POST['listeAbsence_dept']) || isset($_POST['listeAbsence_filiere']) || isset($_POST['listeAbsence_groupe'])) {
                     ?>
             <table>
                 <tr>
@@ -171,30 +171,30 @@ if (isset($_POST['abscence_cours']) && trim($_POST['abscence_cours']) != "") {
                         if (isset($idFiliere)) {
                             // Si on a aussi choisi un groupe.
                             if (isset($idGroupe)) {
-                                // On récupère les abscences du groupe.
-                                $abcences = $dataManagement->selectAllAbscenceByGroupe($idGroupe);
+                                // On récupère les absences du groupe.
+                                $abcences = $dataManagement->selectAllAbsenceByGroupe($idGroupe);
                             } else {
-                                // On récupère les abscences de la filiere.
-                                $abcences = $dataManagement->selectAllAbscenceByFilere($idFiliere);
+                                // On récupère les absences de la filiere.
+                                $abcences = $dataManagement->selectAllAbsenceByFilere($idFiliere);
                             }
                         } else {
-                            // On récupère les abscences du département.
-                            $abcences = $dataManagement->selectAllAbscenceByDepartement($idDepartement);
+                            // On récupère les absences du département.
+                            $abcences = $dataManagement->selectAllAbsenceByDepartement($idDepartement);
                         }
                     } else {
-                        // On récupère toutes les abscences.
-                        $abcences = $dataManagement->selectAllAbscence();
+                        // On récupère toutes les absences.
+                        $abcences = $dataManagement->selectAllAbsence();
                     }
-                    // Afficher les abscences.
+                    // Afficher les absences.
                     foreach ($abcences as $abcence) {
                         // Si on cherche un étudiant en particulier.
-                        if (isset($listeAbscence_etudiant)) {
-                            // Si le nom recherché se trouve dans l'une des abscences, on l'affiche.
-                            if ($listeAbscence_etudiant == ($abcence[0]." ".$abcence[1])) {
+                        if (isset($listeAbsence_etudiant)) {
+                            // Si le nom recherché se trouve dans l'une des absences, on l'affiche.
+                            if ($listeAbsence_etudiant == ($abcence[0]." ".$abcence[1])) {
                                 print("<tr><td>".$abcence[0]." ".$abcence[1]."</td><td>".$abcence[2]."</td><td>".$abcence[3]." - ".$abcence[4]."</td></tr>");
                             }
                         }
-                        // Si on ne cherche pas d'étudiant en particulier, on affiche toutes les abscences.
+                        // Si on ne cherche pas d'étudiant en particulier, on affiche toutes les absences.
                         else {
                             print("<tr><td>".$abcence[0]." ".$abcence[1]."</td><td>".$abcence[2]."</td><td>".$abcence[3]." - ".$abcence[4]."</td></tr>");
                         }

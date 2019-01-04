@@ -4,19 +4,19 @@
  * @author guilhem.mateo
  *
  */
-class Abscence
+class Absence
 {
-    private $id_abscence;
+    private $id_absence;
 
     private $ine;
 
     private $id_cours;
     
     // Constructeur de la classe
-    public function __construct($pid_abscence, $pine, $pid_cours)
+    public function __construct($pid_absence, $pine, $pid_cours)
     {
         $this->ine = $pine;
-        $this->id_abscence = $pid_abscence;
+        $this->id_absence = $pid_absence;
         $this->id_cours = $pid_cours;
     }
     
@@ -26,18 +26,18 @@ class Abscence
      *
      * @return mixed
      */
-    public function getIdAbscence()
+    public function getIdAbsence()
     {
-        return $this->id_abscence;
+        return $this->id_absence;
     }
 
     /**
      *
-     * @param mixed $id_abscence
+     * @param mixed $id_absence
      */
-    public function setIdAbscence($id_abscence)
+    public function setIdAbsence($id_absence)
     {
-        $this->id_abscence = $id_abscence;
+        $this->id_absence = $id_absence;
     }
     
     /**

@@ -9,7 +9,7 @@ COURS_GROUPE, 0N COURS, 0N GROUPE: id_cours, id_groupe
 :
 
 ETUDIANT: ine_etudiant, nom, prenom
-ABSCENCE, 0N ETUDIANT, 0N COURS: id_abscence, id_cours, ine_etudiant
+ABSENCE, 0N ETUDIANT, 0N COURS: id_abscence, id_cours, ine_etudiant
 COURS: id_cours, id_matiere, id_salle, horaire_debut, horaire_fin
 ANIME, 0N COURS, 0N PERSONNEL: id_cours, id_personnel
 PERSONNEL: id_personnel, login, mdp, nom, prenom, id_responsabilite

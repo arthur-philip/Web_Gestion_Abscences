@@ -29,14 +29,14 @@ class DataManagement
     //----------INSERT----------\\
 
     /**
-     * Insertion d'une abscence en base de données.
+     * Insertion d'une absence en base de données.
      *
-     * @param $abscence L'abscence à insérer dans la base de données.
+     * @param $absence L'absence à insérer dans la base de données.
     */
-    public function insertAbscence($ine, $idCours)
+    public function insertAbsence($ine, $idCours)
     {
-        // Remplis la table Abscence
-        $reqInsAbs = $this->db->prepare("INSERT INTO abscence (id_cours, ine_etudiant) VALUES (:idCours, :ineEtudiant)");
+        // Remplis la table Absence
+        $reqInsAbs = $this->db->prepare("INSERT INTO absence (id_cours, ine_etudiant) VALUES (:idCours, :ineEtudiant)");
         $reqInsAbs->bindValue(':idCours', $idCours);
         $reqInsAbs->bindValue(':ineEtudiant', $ine);
         $reqInsAbs->execute();
@@ -190,68 +190,68 @@ class DataManagement
     //----------UPDATE----------\\
 
     /**
-     * Mise à jour d'une abscence en base de données.
+     * Mise à jour d'une absence en base de données.
      *
-     * @param $abscence L'abscence à mettre à jour dans la base de données.
+     * @param $absence L'absence à mettre à jour dans la base de données.
     */
-    public function updateAbscence(Abscence $abscence)
+    public function updateAbsence(Absence $absence)
     {
-        // Mise à jour de la table Abscence
-        $reqUpdAbs = $this->db->prepare("UPDATE abscence SET id_cours = :idCours, ine_etudiant = :ineEtudiant WHERE id_abscence = :idAbscence");
-        $reqUpdAbs->bindValue(':idAbscence', $abscence->getIdAbscence());
-        $reqUpdAbs->bindValue(':idCours', $abscence->getIdAbscence());
-        $reqUpdAbs->bindValue(':ineEtudiant', $abscence->getINE());
+        // Mise à jour de la table Absence
+        $reqUpdAbs = $this->db->prepare("UPDATE absence SET id_cours = :idCours, ine_etudiant = :ineEtudiant WHERE id_absence = :idAbsence");
+        $reqUpdAbs->bindValue(':idAbsence', $absence->getIdAbsence());
+        $reqUpdAbs->bindValue(':idCours', $absence->getIdAbsence());
+        $reqUpdAbs->bindValue(':ineEtudiant', $absence->getINE());
         $reqUpdAbs->execute();
     }
 
     //----------DELETE----------\\
 
     /**
-     * Suppression d'une abscence en base de données.
+     * Suppression d'une absence en base de données.
      *
-     * @param $abscence L'abscence à supprimer de la base de données.
+     * @param $absence L'absence à supprimer de la base de données.
     */
-    public function deleteAbscence(Abscence $abscence)
+    public function deleteAbsence(Absence $absence)
     {
-        // Mise à jour de la table Abscence
-        $reqDelAbs = $this->db->prepare("DELETE FROM abscence WHERE id_abscence = :idAbscence");
-        $reqDelAbs->bindValue(':idAbscence', $abscence->getIdAbscence());
+        // Mise à jour de la table Absence
+        $reqDelAbs = $this->db->prepare("DELETE FROM absence WHERE id_absence = :idAbsence");
+        $reqDelAbs->bindValue(':idAbsence', $absence->getIdAbsence());
         $reqDelAbs->execute();
     }
 
     //----------SELECT----------\\
 
     /**
-     * Selection des abscences d'un étudiant de la base de données.
+     * Selection des absences d'un étudiant de la base de données.
      *
-     * @param $etudiant L'étudiant dont on cherche les abscences.
-     * @return $data Tableau contenant toutes les abscences de l'étudiant.
+     * @param $etudiant L'étudiant dont on cherche les absences.
+     * @return $data Tableau contenant toutes les absences de l'étudiant.
     */
-    public function selectAbscenceByEtudiant(Etudiant $etudiant)
+    public function selectAbsenceByEtudiant(Etudiant $etudiant)
     {
         $data = [];
-        // Lecture la table Abscence
-        $reqSAbsByEtu = $this->db->prepare("SELECT * FROM abscence WHERE ine_etudiant = ?");
+        // Lecture la table Absence
+        $reqSAbsByEtu = $this->db->prepare("SELECT * FROM absence WHERE ine_etudiant = ?");
         if ($reqSAbsByEtu->execute(array($etudiant->getINE()))) {
             // Si les informations sont correctes (au moins un résultat trouvé)
             for ($cpt=0; $ligne=$reqSAbsByEtu->fetch(); $cpt++) {
-                $data[$cpt] = new Abscence($ligne["id_abscence"], $ligne["ine_etudiant"], $ligne["id_cours"]);
+                $data[$cpt] = new Absence($ligne["id_absence"], $ligne["ine_etudiant"], $ligne["id_cours"]);
             }
         }
         return $data;
     }
 
     /**
-     * Selection de toutes les abscences de la base de données.
+     * Selection de toutes les absences de la base de données.
      *
-     * @return $data Tableau contenant toutes les abscences.
+     * @return $data Tableau contenant toutes les absences.
     */
-    public function selectAllAbscence()
+    public function selectAllAbsence()
     {
         $data = [];
         // Lecture des tables
         $reqSelAllAbs = $this->db->prepare("SELECT etu.nom, etu.prenom, mat.libelle, cou.horaire_debut, cou.horaire_fin 
-                                            FROM abscence abs, cours cou, cours_groupe cougro, etudiant etu, groupe gro, groupe_etudiant groetu, matiere mat 
+                                            FROM absence abs, cours cou, cours_groupe cougro, etudiant etu, groupe gro, groupe_etudiant groetu, matiere mat 
                                             WHERE gro.id_groupe = cougro.id_groupe AND gro.id_groupe = groetu.id_groupe
                                             AND etu.ine_etudiant = groetu.ine_etudiant AND etu.ine_etudiant = abs.ine_etudiant
                                             AND cou.id_cours = cougro.id_cours AND cou.id_cours = abs.id_cours
@@ -267,17 +267,17 @@ class DataManagement
     }
 
     /**
-     * Selection de toutes les abscences d'un groupe dans la base de données.
+     * Selection de toutes les absences d'un groupe dans la base de données.
      *
-     * @param $idGroupe L'id du groupe dont on recherche les abscences.
-     * @return $data Tableau contenant toutes les abscences du groupe.
+     * @param $idGroupe L'id du groupe dont on recherche les absences.
+     * @return $data Tableau contenant toutes les absences du groupe.
     */
-    public function selectAllAbscenceByGroupe($idGroupe)
+    public function selectAllAbsenceByGroupe($idGroupe)
     {
         $data = [];
         // Lecture des tables
         $reqSelAllAbsByGro = $this->db->prepare("SELECT etu.nom, etu.prenom, mat.libelle, cou.horaire_debut, cou.horaire_fin 
-                                            FROM abscence abs, cours cou, cours_groupe cougro, etudiant etu, groupe gro, groupe_etudiant groetu, matiere mat 
+                                            FROM absence abs, cours cou, cours_groupe cougro, etudiant etu, groupe gro, groupe_etudiant groetu, matiere mat 
                                             WHERE gro.id_groupe = cougro.id_groupe AND gro.id_groupe = groetu.id_groupe
                                             AND etu.ine_etudiant = groetu.ine_etudiant AND etu.ine_etudiant = abs.ine_etudiant
                                             AND cou.id_cours = cougro.id_cours AND cou.id_cours = abs.id_cours
@@ -294,17 +294,17 @@ class DataManagement
     }
 
     /**
-     * Selection de toutes les abscences d'une filière dans la base de données.
+     * Selection de toutes les absences d'une filière dans la base de données.
      *
-     * @param $idFiliere L'id de la filière dont on recherche les abscences.
-     * @return $data Tableau contenant toutes les abscences de la filière.
+     * @param $idFiliere L'id de la filière dont on recherche les absences.
+     * @return $data Tableau contenant toutes les absences de la filière.
     */
-    public function selectAllAbscenceByFilere($idFiliere)
+    public function selectAllAbsenceByFilere($idFiliere)
     {
         $data = [];
         // Lecture des tables
         $reqSelAllAbsByFil = $this->db->prepare("SELECT etu.nom, etu.prenom, mat.libelle, cou.horaire_debut, cou.horaire_fin 
-                                            FROM abscence abs, cours cou, cours_groupe cougro, etudiant etu, groupe gro, groupe_etudiant groetu, matiere mat 
+                                            FROM absence abs, cours cou, cours_groupe cougro, etudiant etu, groupe gro, groupe_etudiant groetu, matiere mat 
                                             WHERE gro.id_groupe = cougro.id_groupe AND gro.id_groupe = groetu.id_groupe
                                             AND etu.ine_etudiant = groetu.ine_etudiant AND etu.ine_etudiant = abs.ine_etudiant
                                             AND cou.id_cours = cougro.id_cours AND cou.id_cours = abs.id_cours
@@ -321,17 +321,17 @@ class DataManagement
     }
 
     /**
-     * Selection de toutes les abscences d'un département dans la base de données.
+     * Selection de toutes les absences d'un département dans la base de données.
      *
-     * @param $idDepartement L'id du département dont on recherche les abscences.
-     * @return $data Tableau contenant toutes les abscences du département.
+     * @param $idDepartement L'id du département dont on recherche les absences.
+     * @return $data Tableau contenant toutes les absences du département.
     */
-    public function selectAllAbscenceByDepartement($idDepartement)
+    public function selectAllAbsenceByDepartement($idDepartement)
     {
         $data = [];
         // Lecture des tables
         $reqSelAllAbsByDep = $this->db->prepare("SELECT etu.nom, etu.prenom, mat.libelle, cou.horaire_debut, cou.horaire_fin 
-                                            FROM abscence abs, cours cou, cours_groupe cougro, etudiant etu, filiere fil, groupe gro, groupe_etudiant groetu, matiere mat 
+                                            FROM absence abs, cours cou, cours_groupe cougro, etudiant etu, filiere fil, groupe gro, groupe_etudiant groetu, matiere mat 
                                             WHERE gro.id_groupe = cougro.id_groupe AND gro.id_groupe = groetu.id_groupe
                                             AND etu.ine_etudiant = groetu.ine_etudiant AND etu.ine_etudiant = abs.ine_etudiant
                                             AND cou.id_cours = cougro.id_cours AND cou.id_cours = abs.id_cours
@@ -375,7 +375,7 @@ class DataManagement
     /**
      * Selection de touts les départements de la base de données.
      *
-     * @return $data Tableau contenant toutes les abscences.
+     * @return $data Tableau contenant toutes les absences.
     */
     public function selectAllDepartement()
     {

@@ -25,19 +25,19 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Structure de la table `abscence`
+-- Structure de la table `absence`
 --
 
-DROP TABLE IF EXISTS `abscence`;
-CREATE TABLE IF NOT EXISTS `abscence` (
-  `id_abscence` int(10) NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS `absence`;
+CREATE TABLE IF NOT EXISTS `absence` (
+  `id_absence` int(10) NOT NULL AUTO_INCREMENT,
   `id_cours` int(10) NOT NULL,
   `ine_etudiant` varchar(11) NOT NULL,
-  PRIMARY KEY (`id_abscence`),
+  PRIMARY KEY (`id_absence`),
   UNIQUE KEY `id_cours` (`id_cours`,`ine_etudiant`),
-  KEY `abscence_cours_fk` (`id_cours`),
-  KEY `abscence_etudiant_fk` (`ine_etudiant`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+  KEY `absence_cours_fk` (`id_cours`),
+  KEY `absence_etudiant_fk` (`ine_etudiant`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `cours` (
   PRIMARY KEY (`id_cours`),
   KEY `cours_matiere_fk` (`id_matiere`),
   KEY `cours_salle_fk` (`id_salle`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `departement` (
   `id_departement` int(10) NOT NULL AUTO_INCREMENT,
   `libelle` varchar(25) NOT NULL,
   PRIMARY KEY (`id_departement`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -128,7 +128,7 @@ CREATE TABLE IF NOT EXISTS `filiere` (
   `libelle` varchar(25) NOT NULL,
   PRIMARY KEY (`id_filiere`),
   KEY `filiere_departement_fk` (`id_departement`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -143,7 +143,7 @@ CREATE TABLE IF NOT EXISTS `groupe` (
   `libelle` varchar(25) NOT NULL,
   PRIMARY KEY (`id_groupe`),
   KEY `groupe_filiere_fk` (`id_filiere`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -158,7 +158,7 @@ CREATE TABLE IF NOT EXISTS `groupe_etudiant` (
   PRIMARY KEY (`id_groupe`,`ine_etudiant`) USING BTREE,
   UNIQUE KEY `groupe_etudiant_ine_etudiant_fk` (`ine_etudiant`),
   KEY `groupe_etudiant_id_groupe_fk` (`id_groupe`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -171,7 +171,7 @@ CREATE TABLE IF NOT EXISTS `matiere` (
   `id_matiere` int(10) NOT NULL AUTO_INCREMENT,
   `libelle` varchar(50) NOT NULL,
   PRIMARY KEY (`id_matiere`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -190,7 +190,7 @@ CREATE TABLE IF NOT EXISTS `personnel` (
   PRIMARY KEY (`id_personnel`),
   UNIQUE KEY `uniq_login` (`login`) USING BTREE,
   KEY `personnel_responsabilite_fk` (`id_responsabilite`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `personnel`
@@ -212,7 +212,7 @@ CREATE TABLE IF NOT EXISTS `responsabilite` (
   `id_responsabilite` int(10) NOT NULL AUTO_INCREMENT,
   `libelle` varchar(25) NOT NULL,
   PRIMARY KEY (`id_responsabilite`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `responsabilite`
@@ -234,18 +234,18 @@ CREATE TABLE IF NOT EXISTS `salle` (
   `id_salle` int(10) NOT NULL AUTO_INCREMENT,
   `libelle` varchar(10) NOT NULL,
   PRIMARY KEY (`id_salle`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 --
 -- Contraintes pour les tables déchargées
 --
 
 --
--- Contraintes pour la table `abscence`
+-- Contraintes pour la table `absence`
 --
-ALTER TABLE `abscence`
-  ADD CONSTRAINT `abscence_cours_fk` FOREIGN KEY (`id_cours`) REFERENCES `cours` (`id_cours`),
-  ADD CONSTRAINT `abscence_etudiant_fk` FOREIGN KEY (`ine_etudiant`) REFERENCES `etudiant` (`ine_etudiant`);
+ALTER TABLE `absence`
+  ADD CONSTRAINT `absence_cours_fk` FOREIGN KEY (`id_cours`) REFERENCES `cours` (`id_cours`),
+  ADD CONSTRAINT `absence_etudiant_fk` FOREIGN KEY (`ine_etudiant`) REFERENCES `etudiant` (`ine_etudiant`);
 
 --
 -- Contraintes pour la table `anime`
