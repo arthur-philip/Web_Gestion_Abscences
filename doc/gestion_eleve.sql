@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  jeu. 03 jan. 2019 à 22:33
+-- Généré le :  ven. 04 jan. 2019 à 09:09
 -- Version du serveur :  5.7.23
 -- Version de PHP :  7.2.10
 
@@ -245,6 +245,13 @@ CREATE TABLE IF NOT EXISTS `salle` (
 ALTER TABLE `abscence`
   ADD CONSTRAINT `abscence_cours_fk` FOREIGN KEY (`id_cours`) REFERENCES `cours` (`id_cours`),
   ADD CONSTRAINT `abscence_etudiant_fk` FOREIGN KEY (`ine_etudiant`) REFERENCES `etudiant` (`ine_etudiant`);
+
+--
+-- Contraintes pour la table `anime`
+--
+ALTER TABLE `anime`
+  ADD CONSTRAINT `anime_cours_fk` FOREIGN KEY (`id_cours`) REFERENCES `cours` (`id_cours`),
+  ADD CONSTRAINT `anime_personnel_fk` FOREIGN KEY (`id_personnel`) REFERENCES `personnel` (`id_personnel`);
 
 --
 -- Contraintes pour la table `cours`
