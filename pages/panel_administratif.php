@@ -132,7 +132,7 @@
                 <p>Nom</p>
                 <input type="text" name="createDepart_nom" value="<?php if (isset($createDepart_nom)) {
         echo $createDepart_nom;
-    } ?>">
+    } ?>"  required>
                 <input type="submit" value="Créer">
             </form>
         </div>
@@ -142,10 +142,9 @@
                 <p>Nom</p>
                 <input type="text" name="createFiliere_nom" value="<?php if (isset($createFiliere_nom)) {
         echo $createFiliere_nom;
-    } ?>">
+    } ?>" required>
                 <p>Département</p>
-                <select name="createFiliere_dep">
-                <option value=""></option>
+                <select name="createFiliere_dep" required>
                     <?php
 
                         // On récupére tous les départements.
@@ -153,9 +152,9 @@
                         
                         // On crée une option pour chacun d'eux (avec son id en value).
                         foreach ($departements as $dept) {
-                            if(isset($createFiliere_dep) && $dept->getIdDepartement() == $createFiliere_dep){
+                            if (isset($createFiliere_dep) && $dept->getIdDepartement() == $createFiliere_dep) {
                                 print("<option selected='selected' value='".$dept->getIdDepartement()."'>".$dept->getLibelle()."</option>");
-                            }else{
+                            } else {
                                 print("<option value='".$dept->getIdDepartement()."'>".$dept->getLibelle()."</option>");
                             }
                         }

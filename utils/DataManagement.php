@@ -20,6 +20,11 @@ class DataManagement
     {
         $this->db = new PDO('mysql:host=localhost;dbname=gestion_eleve;charset=utf8', $this->user, $this->pass);
     }
+
+    public function getDB()
+    {
+        return $this->db;
+    }
     
     //----------INSERT----------\\
 
@@ -87,14 +92,13 @@ class DataManagement
      *
      * @param $etudiant L'étudiant à insérer dans la base de données.
     */
-    public function insertEtudiant(Etudiant $etudiant)
+    public function insertEtudiant(Etudiant $etudiant, $requete)
     {
         // Remplis la table Etudiant
-        $reqInsEtu = $this->db->prepare("INSERT INTO etudiant (ine_etudiant, nom, prenom) VALUES (:ineEtudiant, :nom, :prenom)");
-        $reqInsEtu->bindValue(':ineEtudiant', $etudiant->getINE());
-        $reqInsEtu->bindValue(':nom', $etudiant->getNom());
-        $reqInsEtu->bindValue(':prenom', $etudiant->getPrenom());
-        $reqInsEtu->execute();
+        $requete->bindValue(':ine_etudiant', $etudiant->getINE());
+        $requete->bindValue(':nom', $etudiant->getNom());
+        $requete->bindValue(':prenom', $etudiant->getPrenom());
+        $requete->execute();
     }
 
     /**
@@ -245,8 +249,8 @@ class DataManagement
     public function selectAllAbscence()
     {
         $data = [];
-        // Lecture la table Abscence
-        $reqSelAllAbs = $this->db->prepare("SELECT etu.nom, etu.prenom, mat.libelle, cou.horaire_debut 
+        // Lecture des tables
+        $reqSelAllAbs = $this->db->prepare("SELECT etu.nom, etu.prenom, mat.libelle, cou.horaire_debut, cou.horaire_fin 
                                             FROM abscence abs, cours cou, cours_groupe cougro, etudiant etu, groupe gro, groupe_etudiant groetu, matiere mat 
                                             WHERE gro.id_groupe = cougro.id_groupe AND gro.id_groupe = groetu.id_groupe
                                             AND etu.ine_etudiant = groetu.ine_etudiant AND etu.ine_etudiant = abs.ine_etudiant
@@ -255,7 +259,89 @@ class DataManagement
         if ($reqSelAllAbs->execute()) {
             // Si les informations sont correctes (au moins un résultat trouvé)
             for ($cpt=0; $ligne=$reqSelAllAbs->fetch(); $cpt++) {
-                $data[$cpt] = [$ligne["nom"], $ligne["prenom"], $ligne["libelle"], $ligne["horaire_debut"]];
+                $horaireFin = explode(" ", $ligne["horaire_fin"]);
+                $data[$cpt] = [$ligne["nom"], $ligne["prenom"], $ligne["libelle"], $ligne["horaire_debut"], $horaireFin[1]];
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * Selection de toutes les abscences d'un groupe dans la base de données.
+     *
+     * @param $idGroupe L'id du groupe dont on recherche les abscences.
+     * @return $data Tableau contenant toutes les abscences du groupe.
+    */
+    public function selectAllAbscenceByGroupe($idGroupe)
+    {
+        $data = [];
+        // Lecture des tables
+        $reqSelAllAbsByGro = $this->db->prepare("SELECT etu.nom, etu.prenom, mat.libelle, cou.horaire_debut, cou.horaire_fin 
+                                            FROM abscence abs, cours cou, cours_groupe cougro, etudiant etu, groupe gro, groupe_etudiant groetu, matiere mat 
+                                            WHERE gro.id_groupe = cougro.id_groupe AND gro.id_groupe = groetu.id_groupe
+                                            AND etu.ine_etudiant = groetu.ine_etudiant AND etu.ine_etudiant = abs.ine_etudiant
+                                            AND cou.id_cours = cougro.id_cours AND cou.id_cours = abs.id_cours
+                                            AND mat.id_matiere = cou.id_matiere
+                                            AND cou.id_cours = ?");
+        if ($reqSelAllAbsByGro->execute(array($idGroupe))) {
+            // Si les informations sont correctes (au moins un résultat trouvé)
+            for ($cpt=0; $ligne=$reqSelAllAbsByGro->fetch(); $cpt++) {
+                $horaireFin = explode(" ", $ligne["horaire_fin"]);
+                $data[$cpt] = [$ligne["nom"], $ligne["prenom"], $ligne["libelle"], $ligne["horaire_debut"], $horaireFin[1]];
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * Selection de toutes les abscences d'une filière dans la base de données.
+     *
+     * @param $idFiliere L'id de la filière dont on recherche les abscences.
+     * @return $data Tableau contenant toutes les abscences de la filière.
+    */
+    public function selectAllAbscenceByFilere($idFiliere)
+    {
+        $data = [];
+        // Lecture des tables
+        $reqSelAllAbsByFil = $this->db->prepare("SELECT etu.nom, etu.prenom, mat.libelle, cou.horaire_debut, cou.horaire_fin 
+                                            FROM abscence abs, cours cou, cours_groupe cougro, etudiant etu, groupe gro, groupe_etudiant groetu, matiere mat 
+                                            WHERE gro.id_groupe = cougro.id_groupe AND gro.id_groupe = groetu.id_groupe
+                                            AND etu.ine_etudiant = groetu.ine_etudiant AND etu.ine_etudiant = abs.ine_etudiant
+                                            AND cou.id_cours = cougro.id_cours AND cou.id_cours = abs.id_cours
+                                            AND mat.id_matiere = cou.id_matiere
+                                            AND gro.id_filiere = ?");
+        if ($reqSelAllAbsByFil->execute(array($idFiliere))) {
+            // Si les informations sont correctes (au moins un résultat trouvé)
+            for ($cpt=0; $ligne=$reqSelAllAbsByFil->fetch(); $cpt++) {
+                $horaireFin = explode(" ", $ligne["horaire_fin"]);
+                $data[$cpt] = [$ligne["nom"], $ligne["prenom"], $ligne["libelle"], $ligne["horaire_debut"], $horaireFin[1]];
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * Selection de toutes les abscences d'un département dans la base de données.
+     *
+     * @param $idDepartement L'id du département dont on recherche les abscences.
+     * @return $data Tableau contenant toutes les abscences du département.
+    */
+    public function selectAllAbscenceByDepartement($idDepartement)
+    {
+        $data = [];
+        // Lecture des tables
+        $reqSelAllAbsByDep = $this->db->prepare("SELECT etu.nom, etu.prenom, mat.libelle, cou.horaire_debut, cou.horaire_fin 
+                                            FROM abscence abs, cours cou, cours_groupe cougro, etudiant etu, filiere fil, groupe gro, groupe_etudiant groetu, matiere mat 
+                                            WHERE gro.id_groupe = cougro.id_groupe AND gro.id_groupe = groetu.id_groupe
+                                            AND etu.ine_etudiant = groetu.ine_etudiant AND etu.ine_etudiant = abs.ine_etudiant
+                                            AND cou.id_cours = cougro.id_cours AND cou.id_cours = abs.id_cours
+                                            AND mat.id_matiere = cou.id_matiere
+                                            AND gro.id_filiere = fil.id_filiere AND fil.id_departement = ?");
+        if ($reqSelAllAbsByDep->execute(array($idDepartement))) {
+            // Si les informations sont correctes (au moins un résultat trouvé)
+            for ($cpt=0; $ligne=$reqSelAllAbsByDep->fetch(); $cpt++) {
+                $horaireFin = explode(" ", $ligne["horaire_fin"]);
+                $data[$cpt] = [$ligne["nom"], $ligne["prenom"], $ligne["libelle"], $ligne["horaire_debut"], $horaireFin[1]];
             }
         }
         return $data;
@@ -286,7 +372,8 @@ class DataManagement
      * @param $departement Le département dont on cherche les filières.
      * @return $data Tableau contenant toutes les filières du département.
     */
-    public function selectAllFiliereByDepartement($departement){
+    public function selectAllFiliereByDepartement($departement)
+    {
         $data = [];
         // Lecture la table Filiere
         $reqSelAllFilByDep = $this->db->prepare("SELECT * FROM filiere WHERE id_departement = ?");
@@ -305,7 +392,8 @@ class DataManagement
      * @param $filiere La filière dont on cherche les groupes.
      * @return $data Tableau contenant touts les groupes de la filière.
     */
-    public function selectAllGroupeByFiliere($filiere){
+    public function selectAllGroupeByFiliere($filiere)
+    {
         //$data = [];
         // Lecture la table Groupe
         $reqSelAllGroByFil = $this->db->prepare("SELECT * FROM groupe WHERE id_filiere = ?");
