@@ -1,7 +1,4 @@
 <?php
-//TODO:
-    //Enregistrer les absences pour les cours
-    //Voir les listes associées (abscence d'un étudiant + abcences)
 
 // Formulaire d'affichage des abscences en fonction du département, de la filière et du groupe.
 if (isset($_POST['listeAbscence_dept']) && trim($_POST['listeAbscence_dept']) != "") {
@@ -23,8 +20,31 @@ if (isset($_POST['listeAbscence_dept']) && trim($_POST['listeAbscence_dept']) !=
     }
 }
 
-if(isset($_POST['listeAbscence_etudiant']) && trim($_POST['listeAbscence_etudiant']) != ""){
-    $etudiant = htmlspecialchars($_POST['listeAbscence_etudiant']);
+if (isset($_POST['listeAbscence_etudiant']) && trim($_POST['listeAbscence_etudiant']) != "") {
+    $listeAbscence_etudiant = htmlspecialchars($_POST['listeAbscence_etudiant']);
+}
+
+if (isset($_POST['abscence_etudiant']) && trim($_POST['abscence_etudiant']) != "") {
+    $abscence_etudiant = htmlspecialchars($_POST['abscence_etudiant']);
+    $etudiant = explode(" ", $abscence_etudiant);
+    // Récup l'étudiant
+    $completeEtudiant = $dataManagement->selectEtudiantByNomPrenom($etudiant[0], $etudiant[1]);
+}
+
+if (isset($_POST['abscence_cours']) && trim($_POST['abscence_cours']) != "") {
+    // On récupère les valeurs du cours et de l'étudiant.
+    $abscence_cours = explode("-", htmlspecialchars($_POST['abscence_cours']));
+
+    // Créer l'absence
+    try {
+        $dataManagement->insertAbscence($abscence_cours[1], $abscence_cours[0]);
+    } catch (Exception $e) {
+        // Si probleme -> affiche une erreur et sort de la boucle.
+        echo "<script>alert('Erreur lors de la création de l'abscence'.');</script>";
+        exit;
+    }
+    // Afficher un message confirmant l'insertion
+    echo "<script>alert('Création de l'abscence réussie.');</script>";
 }
 
 ?>
@@ -33,13 +53,47 @@ if(isset($_POST['listeAbscence_etudiant']) && trim($_POST['listeAbscence_etudian
     <div>
         <div>
             <h3>Saisie d'une abscence</h3>
-            <!-- TODO: Formulaire étudiant-cours avec proposition de complétion en AJAX-->
+            <form method="POST" action="index">
+                Étudiant :
+                <input type="text" name="abscence_etudiant" placeholder="Nom Prénom" value="<?php if (isset($abscence_etudiant)) {
+    echo $abscence_etudiant;
+}?>">
+                <input type="submit" value="Rechercher">
+            </form>
+            <form method="POST" action="index">
+                Cours :
+                <select name="abscence_cours">
+                    <option value=""></option>
+                    <?php
+                        // TODO: maj avec AJAX quand on saisi un étudiant.
+                        // Si on a saisi un étudiant.
+                        if (isset($completeEtudiant)) {
+                            // Récupérer les cours de l'étudiant.
+                            $cours = $dataManagement->selectAllCoursByEtudiant($completeEtudiant[1], $completeEtudiant[2]);
+
+                            // On crée une option pour chacun d'eux (avec son id en value).
+                            foreach ($cours as $cour) {
+                                $libelle = $cour[0]." en ".$cour[1]." : ".$cour[2]." - ".$cour[3];
+                                if (isset($abscence_cours) && $cour["id_cours"] == $abscence_cours) {
+                                    print("<option selected='selected' value='".$cour[4]."-".$completeEtudiant[0]."'>".$libelle."</option>");
+                                } else {
+                                    print("<option value='".$cour[4]."-".$completeEtudiant[0]."'>".$libelle."</option>");
+                                }
+                            }
+                        }
+                    ?>
+                </select>
+                <input type="submit" value="Créer">
+            </form>
+            
         </div>
         <div>
             <h3>Liste des abscences</h3>
             <form method="POST" action="index">
                 Étudiant :
-                <input type="text" name="listeAbscence_etudiant" value="<?php if(isset($etudiant)) echo $etudiant;?>">
+                <input type="text" name="listeAbscence_etudiant" placeholder="Nom Prénom" value="<?php if (isset($listeAbscence_etudiant)) {
+                        echo $listeAbscence_etudiant;
+                    }?>">
                 Département :
                 <select name="listeAbscence_dept">
                     <option value=""></option>
@@ -134,17 +188,16 @@ if(isset($_POST['listeAbscence_etudiant']) && trim($_POST['listeAbscence_etudian
                     // Afficher les abscences.
                     foreach ($abcences as $abcence) {
                         // Si on cherche un étudiant en particulier.
-                        if(isset($etudiant)){
+                        if (isset($listeAbscence_etudiant)) {
                             // Si le nom recherché se trouve dans l'une des abscences, on l'affiche.
-                            if($etudiant == ($abcence[0]." ".$abcence[1])){
+                            if ($listeAbscence_etudiant == ($abcence[0]." ".$abcence[1])) {
                                 print("<tr><td>".$abcence[0]." ".$abcence[1]."</td><td>".$abcence[2]."</td><td>".$abcence[3]." - ".$abcence[4]."</td></tr>");
                             }
                         }
                         // Si on ne cherche pas d'étudiant en particulier, on affiche toutes les abscences.
-                        else{
+                        else {
                             print("<tr><td>".$abcence[0]." ".$abcence[1]."</td><td>".$abcence[2]."</td><td>".$abcence[3]." - ".$abcence[4]."</td></tr>");
                         }
-                        
                     } ?>
             </table>
             <?php

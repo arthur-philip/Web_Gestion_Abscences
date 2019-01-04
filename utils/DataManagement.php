@@ -33,12 +33,12 @@ class DataManagement
      *
      * @param $abscence L'abscence à insérer dans la base de données.
     */
-    public function insertAbscence(Abscence $abscence)
+    public function insertAbscence($ine, $idCours)
     {
         // Remplis la table Abscence
         $reqInsAbs = $this->db->prepare("INSERT INTO abscence (id_cours, ine_etudiant) VALUES (:idCours, :ineEtudiant)");
-        $reqInsAbs->bindValue(':idCours', $abscence->getIdCours());
-        $reqInsAbs->bindValue(':ineEtudiant', $abscence->getINE());
+        $reqInsAbs->bindValue(':idCours', $idCours);
+        $reqInsAbs->bindValue(':ineEtudiant', $ine);
         $reqInsAbs->execute();
     }
 
@@ -348,6 +348,31 @@ class DataManagement
     }
 
     /**
+     * Selection de tous les cours dans la base de données.
+     *
+     * @param $idEtudiant L'étudiant dont on souhaite connaître les cours.
+     * @return $data Tableau contenant tous les cours.
+    */
+    public function selectAllCoursByEtudiant($nomEtudiant, $prenomEtudiant)
+    {
+        $data = [];
+        // Lecture des tables
+        $reqSelAllCouByEtu = $this->db->prepare("SELECT mat.libelle, sal.libelle, cou.horaire_debut, cou.horaire_fin , cou.id_cours
+                                                FROM cours cou, cours_groupe cougro, etudiant etu, groupe gro, groupe_etudiant groetu, matiere mat, salle sal
+                                                WHERE cou.id_matiere = mat.id_matiere AND cou.id_salle = sal.id_salle AND cou.id_cours = cougro.id_cours
+                                                AND gro.id_groupe = cougro.id_groupe AND gro.id_groupe = groetu.id_groupe
+                                                AND etu.ine_etudiant = groetu.ine_etudiant AND etu.nom = ? AND etu.prenom = ? ");
+        if ($reqSelAllCouByEtu->execute(array($nomEtudiant, $prenomEtudiant))) {
+            // Si les informations sont correctes (au moins un résultat trouvé)
+            for ($cpt=0; $ligne=$reqSelAllCouByEtu->fetch(); $cpt++) {
+                $horaireFin = explode(" ", $ligne["horaire_fin"]);
+                $data[$cpt] = [$ligne[0], $ligne[1], $ligne["horaire_debut"], $horaireFin[1], $ligne["id_cours"]];
+            }
+        }
+        return $data;
+    }
+
+    /**
      * Selection de touts les départements de la base de données.
      *
      * @return $data Tableau contenant toutes les abscences.
@@ -364,6 +389,25 @@ class DataManagement
             }
         }
         return $data;
+    }
+
+    /**
+     * Selection de toutes les filières d'un département en base de données.
+     *
+     * @param $departement Le département dont on cherche les filières.
+     * @return $data Tableau contenant toutes les filières du département.
+    */
+    public function selectEtudiantByNomPrenom($nom, $prenom)
+    {
+        // Lecture la table Etudiant
+        $reqSelAllFilByDep = $this->db->prepare("SELECT * FROM etudiant WHERE nom = ? AND prenom = ?");
+        if ($reqSelAllFilByDep->execute(array($nom, $prenom))) {
+            // Si les informations sont correctes (au moins un résultat trouvé)
+            for ($cpt=0; $ligne=$reqSelAllFilByDep->fetch(); $cpt++) {
+                return [$ligne["ine_etudiant"], $ligne["nom"], $ligne["prenom"]];
+            }
+        }
+        return -1;
     }
 
     /**

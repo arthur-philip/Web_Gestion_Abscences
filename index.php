@@ -10,6 +10,7 @@
     // Importation des fonctions usuelles de connexion à la base de données.
     include_once('utils/DataManagement.php');
     include_once('objets/Departement.php');
+    include_once('objets/Etudiant.php');
     include_once('objets/Filiere.php');
     include_once('objets/Personnel.php');
 
