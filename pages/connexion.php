@@ -43,24 +43,32 @@
 <head>
 	<meta charset="utf-8" />
 	<title>Connexion</title>
-	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="css/bootstrap-grid.min.css">
-	<link rel="stylesheet" type="text/css" href="css/bootstrap-reboot.min.css">
-	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="../css/bootstrap-grid.min.css">
+	<link rel="stylesheet" type="text/css" href="../css/bootstrap-reboot.min.css">
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
 </head>
 <body>
-	<h1>Connexion</h1>
-	<form method="POST" action="connexion">
-		<h3>Login</h3>
-		<p><input type="text" name="login" placeholder="Entrez votre login ici" value="<?php if (isset($login)) {
-    echo $login;
-} ?>" required></p>
-		<h3>Mot de passe</h3>
-		<p><input type="password" name="password" placeholder="Entrez votre mot de passe ici" value="<?php if (isset($password)) {
-    echo $password;
-} ?>" required></p>
-		<input type="submit" vlaue="Connexion">
-	</form>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+			<div class="col-10 col-sm-8 col-md-6 col-lg-4 col-xl-3">
+				<div id="conteneur">
+					<form name="form" id="leFormulaire" method="POST" action="connexion">
+                        <h1>Connexion</h1>
+						<h3>Login</h3>
+                        <p><input type="text" name="login" placeholder="Entrez votre login ici" value="<?php if (isset($login)) {
+                            echo $login;
+                        } ?>" required></p>
+                        <h3>Mot de passe</h3>
+                        <p><input type="password" name="password" placeholder="Entrez votre mot de passe ici" value="<?php if (isset($password)) {
+                            echo $password;
+                        } ?>" required></p>
+						<input class="myButton" type="submit" value="Connexion">
+					</form>
+				</div>
+			</div>
+        </div>
+    </div>
 	<script src="js/jquery-3.3.1.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>

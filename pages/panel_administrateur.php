@@ -43,28 +43,28 @@
         }
     }
 ?>
-<section>
+<section class="row justify-content-center">
     <h2 class="toggleNext">Panel administrateur</h2>
-    <div>
-        <h3>Création d'un administratif</h3>
-        <form method="POST" action="index">
+    <div class="col-10 col-sm-8 col-md-6 col-lg-4 col-xl-3">
+        <form id="leFormulaire" method="POST" action="index">
+            <h4>Création d'un administratif</h4>
             <p>Login</p>
-            <input type="text" name="createAdmin_login" value="<?php if (isset($createAdmin_login)) {
-    echo $createAdmin_login;
-} ?>" required>
+            <p><input type="text" name="createAdmin_login" value="<?php if (isset($createAdmin_login)) {
+                echo $createAdmin_login;
+            } ?>" required></p>
             <p>Mot de passe</p>
-            <input type="password" name="createAdmin_mdp" value="<?php if (isset($createAdmin_mdp)) {
-    echo $createAdmin_mdp;
-} ?>" required>
+            <p><input type="password" name="createAdmin_mdp" value="<?php if (isset($createAdmin_mdp)) {
+                echo $createAdmin_mdp;
+            } ?>" required></p>
             <p>Nom</p>
-            <input type="text" name="createAdmin_nom" value="<?php if (isset($createAdmin_nom)) {
-    echo $createAdmin_nom;
-} ?>">
+            <p><input type="text" name="createAdmin_nom" value="<?php if (isset($createAdmin_nom)) {
+                echo $createAdmin_nom;
+            } ?>"></p>
             <p>Prenom</p>
-            <input type="text" name="createAdmin_prenom" value="<?php if (isset($createAdmin_prenom)) {
-    echo $createAdmin_prenom;
-} ?>">
-            <input type="submit" value="Créer">
+            <p><input type="text" name="createAdmin_prenom" value="<?php if (isset($createAdmin_prenom)) {
+                echo $createAdmin_prenom;
+            } ?>"></p>
+            <input class="myButton" type="submit" value="Créer">
         </form>
     </div>
 </section>

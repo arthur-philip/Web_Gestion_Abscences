@@ -103,48 +103,48 @@
         // Voir les listes associées (étudiants + matières)
     ?>
     <h2 class="toggleNext">Panel administratif</h2>
-    <div>
-        <div>
-            <h3>Création d'un professeur</h3>
-            <form method="POST" action="index">
+    <div class="row">
+        <div class="col-3">
+            <form id="leFormulaire" method="POST" action="index">
+                <h3>Création d'un professeur</h3>
                 <p>Login</p>
                 <input type="text" name="createProf_login" value="<?php if (isset($createProf_login)) {
-        echo $createProf_login;
-    } ?>" required>
+                    echo $createProf_login;
+                } ?>" required>
                 <p>Mot de passe</p>
                 <input type="password" name="createProf_mdp" value="<?php if (isset($createProf_mdp)) {
-        echo $createProf_mdp;
-    } ?>" required>
+                    echo $createProf_mdp;
+                } ?>" required>
                 <p>Nom</p>
                 <input type="text" name="createProf_nom" value="<?php if (isset($createProf_nom)) {
-        echo $createProf_nom;
-    } ?>">
+                    echo $createProf_nom;
+                } ?>">
                 <p>Prenom</p>
-                <input type="text" name="createProf_prenom" value="<?php if (isset($createProf_prenom)) {
-        echo $createProf_prenom;
-    } ?>">
-                <input type="submit" value="Créer">
+                <p><input type="text" name="createProf_prenom" value="<?php if (isset($createProf_prenom)) {
+                    echo $createProf_prenom;
+                } ?>"></p>
+                <input class="myButton" type="submit" value="Créer">
             </form>
         </div>
-        <div>
-            <h3>Création d'un département</h3>
-            <form method="POST" action="index">
+        <div class="col-3">
+            <form id="leFormulaire" method="POST" action="index">
+                <h3>Création d'un département</h3>
                 <p>Nom</p>
-                <input type="text" name="createDepart_nom" value="<?php if (isset($createDepart_nom)) {
-        echo $createDepart_nom;
-    } ?>"  required>
-                <input type="submit" value="Créer">
+                <p><input type="text" name="createDepart_nom" value="<?php if (isset($createDepart_nom)) {
+                    echo $createDepart_nom;
+                } ?>"  required></p>
+                <input class="myButton" type="submit" value="Créer">
             </form>
         </div>
-        <div>
-            <h3>Création d'une filière</h3>
-            <form method="POST" action="index">
+        <div class="col-3">
+            <form id="leFormulaire" method="POST" action="index">
+                <h3>Création d'une filière</h3>
                 <p>Nom</p>
                 <input type="text" name="createFiliere_nom" value="<?php if (isset($createFiliere_nom)) {
         echo $createFiliere_nom;
     } ?>" required>
                 <p>Département</p>
-                <select name="createFiliere_dep" required>
+                <p><select name="createFiliere_dep" required>
                     <?php
 
                         // On récupére tous les départements.
@@ -159,17 +159,17 @@
                             }
                         }
                     ?>
-                </select>
-                <input type="submit" value="Créer">
+                </select></p>
+                <input class="myButton" type="submit" value="Créer">
             </form>
         </div>
-        <div>
+        <div class="col-3">
             <h3>Importations des étudiants et des plannings + suppression d'un planning</h3>
         </div>
-        <div>
+        <div class="col-6">
             <h3>Liste des étudiants</h3>
         </div>
-        <div>
+        <div class="col-6">
             <h3>Liste des matières</h3>
         </div>
     </div>

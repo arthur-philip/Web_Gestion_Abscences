@@ -50,19 +50,19 @@ if (isset($_POST['absence_cours']) && trim($_POST['absence_cours']) != "") {
 ?>
 <section>
     <h2 class="toggleNext">Panel professeur</h2>
-    <div>
-        <div>
-            <h3>Saisie d'une absence</h3>
-            <form method="POST" action="index">
-                Étudiant :
-                <input type="text" name="absence_etudiant" placeholder="Nom Prénom" value="<?php if (isset($absence_etudiant)) {
-    echo $absence_etudiant;
-}?>">
-                <input type="submit" value="Rechercher">
+    <div class="row">
+        <div class="col-3">
+            <form id="leFormulaire" method="POST" action="index">
+                <h3>Saisie d'une absence</h3>
+                <p>Étudiant :</p>
+                <p><input type="text" name="absence_etudiant" placeholder="Nom Prénom" value="<?php if (isset($absence_etudiant)) {
+                    echo $absence_etudiant;
+                }?>"></p>
+                <input class="myButton" type="submit" value="Rechercher">
             </form>
-            <form method="POST" action="index">
-                Cours :
-                <select name="absence_cours">
+            <form id="leFormulaire" method="POST" action="index">
+                <p>Cours :</p>
+                <p><select name="absence_cours">
                     <option value=""></option>
                     <?php
                         // TODO: maj avec AJAX quand on saisi un étudiant.
@@ -82,14 +82,13 @@ if (isset($_POST['absence_cours']) && trim($_POST['absence_cours']) != "") {
                             }
                         }
                     ?>
-                </select>
-                <input type="submit" value="Créer">
+                </select></p>
+                <input class="myButton" type="submit" value="Créer">
             </form>
-            
         </div>
-        <div>
-            <h3>Liste des absences</h3>
-            <form method="POST" action="index">
+        <div class="col-9">
+            <form id="leFormulaire" method="POST" action="index">
+                <h3>Liste des absences</h3>
                 Étudiant :
                 <input type="text" name="listeAbsence_etudiant" placeholder="Nom Prénom" value="<?php if (isset($listeAbsence_etudiant)) {
                         echo $listeAbsence_etudiant;
@@ -152,19 +151,22 @@ if (isset($_POST['absence_cours']) && trim($_POST['absence_cours']) != "") {
                         }
                     ?>
                 </select>
-                <input type="submit" value="Rechercher">
+                <input class="myButton" type="submit" value="Rechercher">
             </form>
             <?php
                 if (isset($_POST['listeAbsence_dept']) || isset($_POST['listeAbsence_filiere']) || isset($_POST['listeAbsence_groupe'])) {
                     ?>
-            <table>
-                <tr>
-                    <td>Étudiant</td>
-                    <td>Matière</td>
-                    <td>Date</td>
-                </tr>
-                <?php
-                    $abcences = [];
+            <table class="table-fill">
+                <thead>
+                    <tr>
+                        <td>Étudiant</td>
+                        <td>Matière</td>
+                        <td>Date</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                        $abcences = [];
                     // Si on n'a choisi qu'un département.
                     if (isset($idDepartement)) {
                         // Si on a aussi choisi une filière.
@@ -199,6 +201,7 @@ if (isset($_POST['absence_cours']) && trim($_POST['absence_cours']) != "") {
                             print("<tr><td>".$abcence[0]." ".$abcence[1]."</td><td>".$abcence[2]."</td><td>".$abcence[3]." - ".$abcence[4]."</td></tr>");
                         }
                     } ?>
+                </tbody>
             </table>
             <?php
                 } ?>

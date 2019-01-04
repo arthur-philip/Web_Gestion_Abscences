@@ -31,39 +31,51 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<title>Acceuil</title>
-	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="css/bootstrap-grid.min.css">
-	<link rel="stylesheet" type="text/css" href="css/bootstrap-reboot.min.css">
+	<title>Gestion des absences</title>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-grid.css">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-reboot.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
-    <!--HEADER-->
-	<header>
-		<h1>Acceuil</h1>
-		<a href="utils/deconnexion.php">Deconnexion</a>
-	</header>
-	<!--CONTENU-->
-	<?php
-        // Si l'utilisateur connecté est un administrateur
-        if ($_SESSION['responsabilite'] == $resp_administrateur) {
-            include_once('pages/panel_administrateur.php');
-            include_once('pages/panel_administratif.php');
-            include_once('pages/panel_professeur.php');
-        }
-        // Si l'utilisateur connecté est un administratif
-        elseif ($_SESSION['responsabilite'] == $resp_administratif) {
-            include_once('pages/panel_administratif.php');
-        }
-        // Si l'utilisateur connecté est un professeur
-        elseif ($_SESSION['responsabilite'] == $resp_professeur) {
-            include_once('pages/panel_professeur.php');
-        }
-    ?>
-    <!--FOOTER-->
-	<footer>
-		<p>Copyright</p>
-	</footer>
+    <div class="container-fluid">
+    
+        <!--HEADER-->
+        <header class="row">
+			<div class="col-12" id="navbar">
+				<ul>
+                    <li id="titre">Gestion des abscences</li>
+					<li style="float:right"><a id="btDeconnexion" href="utils/deconnexion.php">Déconnexion</a></li>
+				</ul>
+			</div>
+		</header>
+
+        <!--CONTENU-->
+        <?php
+            // Si l'utilisateur connecté est un administrateur
+            if ($_SESSION['responsabilite'] == $resp_administrateur) {
+                include_once('pages/panel_administrateur.php');
+                include_once('pages/panel_administratif.php');
+                include_once('pages/panel_professeur.php');
+            }
+            // Si l'utilisateur connecté est un administratif
+            elseif ($_SESSION['responsabilite'] == $resp_administratif) {
+                include_once('pages/panel_administratif.php');
+            }
+            // Si l'utilisateur connecté est un professeur
+            elseif ($_SESSION['responsabilite'] == $resp_professeur) {
+                include_once('pages/panel_professeur.php');
+            }
+        ?>
+        <!--FOOTER-->
+        <div class="row">
+			<div class="col-12">
+				<footer>
+					<h5>Arthur Philip, Jordan Pedrero, Thibault Kuzmycz</h5>
+				</footer>
+			</div>
+		</div>
+    </div>
 	<script src="js/jquery-3.3.1.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
