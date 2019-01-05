@@ -50,19 +50,19 @@
         <form class="leFormulaire" method="POST" action="index">
             <h4>Création d'un administratif</h4>
             <p>Login</p>
-            <p><input type="text" name="createAdmin_login" value="<?php if (isset($createAdmin_login)) {
+            <p><input type="text" name="createAdmin_login" placeholder="Entrez le login ici" value="<?php if (isset($createAdmin_login)) {
                 echo $createAdmin_login;
             } ?>" required></p>
             <p>Mot de passe</p>
-            <p><input type="password" name="createAdmin_mdp" value="<?php if (isset($createAdmin_mdp)) {
+            <p><input type="password" name="createAdmin_mdp" placeholder="Entrez le mot de passe ici" value="<?php if (isset($createAdmin_mdp)) {
                 echo $createAdmin_mdp;
             } ?>" required></p>
             <p>Nom</p>
-            <p><input type="text" name="createAdmin_nom" value="<?php if (isset($createAdmin_nom)) {
+            <p><input type="text" name="createAdmin_nom" placeholder="Entrez le nom ici" value="<?php if (isset($createAdmin_nom)) {
                 echo $createAdmin_nom;
             } ?>"></p>
             <p>Prenom</p>
-            <p><input type="text" name="createAdmin_prenom" value="<?php if (isset($createAdmin_prenom)) {
+            <p><input type="text" name="createAdmin_prenom" placeholder="Entrez le prenom ici" value="<?php if (isset($createAdmin_prenom)) {
                 echo $createAdmin_prenom;
             } ?>"></p>
             <input class="myButton" type="submit" value="Créer">

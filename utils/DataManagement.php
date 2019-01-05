@@ -18,7 +18,8 @@ class DataManagement
     // Constructeur de la classe de gestion des données de la base de données.
     public function __construct()
     {
-        $this->db = new PDO('mysql:host=localhost;dbname=gestion_eleve;charset=utf8', $this->user, $this->pass);
+        $this->db = new PDO('mysql:host=localhost;dbname=gestion_eleve;charset=utf8', $this->user, $this->pass, array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
+		//$this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
     }
 
     public function getDB()
@@ -44,7 +45,7 @@ class DataManagement
 
     // TODO: anime
     
-    /**
+     /**
      * Insertion d'un cours en base de données.
      *
      * @param $cours Le cours à insérer dans la base de données.
@@ -52,12 +53,16 @@ class DataManagement
     public function insertCours(Cours $cours)
     {
         // Remplis la table Cours
-        $reqCours = $this->db->prepare("INSERT INTO cours (id_matiere, numero_salle, horaire_debut, horaire_fin) VALUES (:idMatiere, :idSalle, :hDebut, :hFin)");
+        $reqCours = $this->db->prepare("INSERT INTO cours (id_matiere, id_salle, horaire_debut, horaire_fin) VALUES (:idMatiere, :idSalle, :hDebut, :hFin)");
         $reqCours->bindValue(':idMatiere', $cours->getIdMatiere());
         $reqCours->bindValue(':idSalle', $cours->getIdSalle());
-        $reqCours->bindValue(':hDebut', $cours->getHoraireDebut());
-        $reqCours->bindValue(':hFin', $cours->getHoraireFin());
-        $reqProf->execute();
+		
+		$hdeb = $cours->getHoraireDebut()->format('Y-m-d H:i:s');
+		$hfin = $cours->getHoraireFin()->format('Y-m-d H:i:s');
+		
+        $reqCours->bindParam(':hDebut', $hdeb);
+        $reqCours->bindParam(':hFin', $hfin);
+        $reqCours->execute();
     }
 
     /**
@@ -87,21 +92,22 @@ class DataManagement
         $reqInsDept->execute();
     }
 
-    /**
+     /**
      * Insertion d'un étudiant en base de données.
      *
      * @param $etudiant L'étudiant à insérer dans la base de données.
     */
-    public function insertEtudiant(Etudiant $etudiant, $requete)
+    public function insertEtudiant(Etudiant $etudiant)
     {
         // Remplis la table Etudiant
-        $requete->bindValue(':ine_etudiant', $etudiant->getINE());
-        $requete->bindValue(':nom', $etudiant->getNom());
-        $requete->bindValue(':prenom', $etudiant->getPrenom());
-        $requete->execute();
+		$reqInsEtu = $this->db->prepare("INSERT INTO etudiant (ine_etudiant,nom,prenom) VALUES (:ine_etudiant,:nom,:prenom)");
+        $reqInsEtu->bindValue(':ine_etudiant', $etudiant->getINE());
+        $reqInsEtu->bindValue(':nom', $etudiant->getNom());
+        $reqInsEtu->bindValue(':prenom', $etudiant->getPrenom());
+        $reqInsEtu->execute();
     }
 
-    /**
+   /**
      * Insertion d'une filiere en base de données.
      *
      * @param $filiere La filiere à insérer dans la base de données.
@@ -115,7 +121,20 @@ class DataManagement
         $reqInsFil->execute();
     }
 
-    /**
+	/**
+     * Insertion d'une filiere en base de données.
+     *
+     * @param $filiere La filiere à insérer dans la base de données.
+    */
+    public function insertFiliereSansDep($libelleFiliere)
+    {
+		// Remplis la table Filiere
+        $reqInsFilSD = $this->db->prepare("INSERT INTO filiere (libelle) VALUES (:libelle)");
+        $reqInsFilSD->bindValue(':libelle', $libelleFiliere);
+        $reqInsFilSD->execute();
+	}
+	
+     /**
      * Insertion d'un groupe en base de données.
      *
      * @param $groupe Le groupe à insérer dans la base de données.
@@ -129,9 +148,22 @@ class DataManagement
         $reqInsGro->execute();
     }
 
-    // TODO: groupe_etudiant
+	/**
+     * Insertion d'un groupe_etudiant en base de données.
+     *
+     * @param $groupe_etudiant Le groupe_etudiant à insérer dans la base de données.
+    */
+    public function insertGroupe_etudiant(Groupe_etudiant $groupe)
+    {
+		
+        // Remplis la table Groupe
+        $reqInsGroEtu = $this->db->prepare("INSERT INTO groupe_etudiant (id_groupe, ine_etudiant) VALUES (:id_groupe, :ine_etudiant)");
+        $reqInsGroEtu->bindValue(':id_groupe', $groupe->getIdGroupe());
+		$reqInsGroEtu->bindValue(':ine_etudiant', $groupe->getIneEtudiant());
+		$reqInsGroEtu->execute();
+    }
 
-    /**
+	 /**
      * Insertion d'une matière en base de données.
      *
      * @param $matiere La matière à insérer dans la base de données.
@@ -144,7 +176,8 @@ class DataManagement
         $reqInsMat->execute();
     }
 
-    /**
+
+   /**
      * Insertion d'un membre du personnel en base de données.
      *
      * @param $personnel Le membre du personnel à insérer dans la base de données.
@@ -174,7 +207,7 @@ class DataManagement
         $reqInsRes->execute();
     }
 
-    /**
+   /**
      * Insertion d'une salle en base de données.
      *
      * @param $salle La salle à insérer dans la base de données.
@@ -182,11 +215,55 @@ class DataManagement
     public function insertSalle(Salle $salle)
     {
         // Remplis la table Salle
-        $reqInsSal = $this->db->prepare("INSERT INTO salle (libelle) VALUES (:libelle)");
-        $reqInsSal->bindValue(':libelle', $salle->getLibelle());
-        $reqInsSal->execute();
+
+		
+		if(trim($salle->getDesc_salle()) != ""){
+			if(trim($salle->getLibelle()) != ""){
+				$query = "INSERT INTO salle (libelle, desc_salle) VALUES (:libelle, :desc_salle)";
+				$reqInsSal = $this->db->prepare($query);
+				$reqInsSal->bindValue(':libelle', $salle->getLibelle());
+				$reqInsSal->bindValue(':desc_salle', $salle->getDesc_salle());
+				$reqInsSal->execute();
+			}
+			
+		} else {
+			if(trim($salle->getLibelle()) != ""){
+				$query = "INSERT INTO salle (libelle) VALUES (:libelle)";
+				$reqInsSal = $this->db->prepare($query);
+				$reqInsSal->bindValue(':libelle', $salle->getLibelle());
+				$reqInsSal->execute();
+			}
+		}
     }
 
+	/**
+     * Insertion d'un Anime en base de données.
+     *
+     * @param $Anime L'anime à insérer dans la base de données.
+    */
+    public function insertAnime(Anime $anime)
+    {
+        // Remplis la table Departement
+        $reqInsAnime = $this->db->prepare("INSERT INTO anime (id_cours, id_personnel) VALUES (:id_cours, :id_personnel)");
+        $reqInsAnime->bindValue(':id_cours', $anime->getIdCours());
+		$reqInsAnime->bindValue(':id_personnel', $anime->getIdPersonnel());
+        $reqInsAnime->execute();
+    }
+
+	/**
+     * Insertion d'un Anime en base de données.
+     *
+     * @param $Anime L'anime à insérer dans la base de données.
+    */
+    public function insertCoursGroupe(CoursGroupe $coursGroupe)
+    {
+        // Remplis la table Departement
+        $reqInsCoursGroupe = $this->db->prepare("INSERT INTO cours_groupe (id_cours, id_groupe) VALUES (:id_cours, :id_groupe)");
+        $reqInsCoursGroupe->bindValue(':id_cours', $coursGroupe->getIdCours());
+		$reqInsCoursGroupe->bindValue(':id_groupe', $coursGroupe->getIdGroupe());
+        $reqInsCoursGroupe->execute();
+    }
+	
     //----------UPDATE----------\\
 
     /**
@@ -221,6 +298,112 @@ class DataManagement
 
     //----------SELECT----------\\
 
+	/**
+     * Selection des ID des matieres dans la base de données en fonction d'un nom de matiere.
+     *
+     * @return $data id de la Matiere.
+    */
+    public function selectIdMatiere($nomMatiere)
+    {
+        // Lecture la table Matiere
+        $reqSelIdMat = $this->db->prepare("SELECT id_matiere FROM matiere WHERE libelle=:nomMatiere");
+		$reqSelIdMat->bindValue(':nomMatiere', $nomMatiere);
+        $reqSelIdMat->execute();
+		
+		$dataIdMat = $reqSelIdMat->fetch();
+           
+        return $dataIdMat;
+    }
+	
+	
+	/**
+     * Selection des un ID d'une salle dans la base de données en fonction d'un nom de salle.
+     *
+     * @return $data id de la salle rechercher
+    */
+    public function selectIdSalle($nomSalle)
+    {
+        // Lecture la table Salle
+		$reqSelIdSalle = $this->db->prepare("SELECT id_salle FROM salle WHERE libelle=:nomSalle");
+		$reqSelIdSalle->bindValue(':nomSalle', $nomSalle);
+        $reqSelIdSalle->execute();
+		
+		$dataIdSalle = $reqSelIdSalle->fetch();
+           
+        return $dataIdSalle;
+    }
+	
+	/**
+     * Selection des ID des cours dans la base de données en fonction d'un nom de cours
+     * @return $data id du cours
+    */
+    public function selectIdCours($idMatiere, $idSalle, $hDebut, $hFin)
+    {
+        // Lecture la table Cours
+        $reqSelIdCours = $this->db->prepare("SELECT id_cours FROM cours WHERE id_matiere=:idMatiere and id_salle=:idSalle and horaire_debut=:hDebut and horaire_fin=:hFin");
+		$reqSelIdCours->bindValue(':idMatiere', $idMatiere);
+		$reqSelIdCours->bindValue(':idSalle', $idSalle);
+		$reqSelIdCours->bindValue(':hDebut', $hDebut->format('Y-m-d H:i:s'));
+		$reqSelIdCours->bindValue(':hFin', $hFin->format('Y-m-d H:i:s'));
+        $reqSelIdCours->execute();
+		
+		$dataIdCours = $reqSelIdCours->fetch();
+           
+        return $dataIdCours;
+    }
+	
+	/**
+     * Selection des ID des personnel dans la base de données en fonction d'un login.
+     *
+     * @return $data id de du personnel.
+    */
+    public function selectIdPersonnel($login)
+    {
+        // Lecture la table personnel
+        $reqSelIdPers = $this->db->prepare("SELECT id_personnel FROM personnel WHERE login=:login");
+		$reqSelIdPers->bindValue(':login', $login);
+        $reqSelIdPers->execute();
+		
+		$dataIdPers = $reqSelIdPers->fetch();
+           
+        return $dataIdPers;
+    }
+	
+	/**
+     * Selection des ID des filieres dans la base de données en fonction d'un libelle.
+     *
+     * @return $data id de la filiere.
+    */
+    public function selectIdFiliere($libelleFiliere)
+    {
+        // Lecture la table Matiere
+        $reqSelIdFil = $this->db->prepare("SELECT id_filiere FROM filiere WHERE libelle=:libelleFiliere");
+		$reqSelIdFil->bindValue(':libelleFiliere', $libelleFiliere);
+        $reqSelIdFil->execute();
+		
+		$dataIdFil = $reqSelIdFil->fetch();
+           
+        return $dataIdFil;
+    }
+	
+	/**
+     * Selection des ID des groupe dans la base de données en fonction d'un nom de groupe.
+     *
+     * @return $data id du groupe.
+    */
+    public function selectIdGroupe($nomGroupe)
+    {
+        // Lecture la table Matiere
+        $reqSelIdGrp = $this->db->prepare("SELECT id_groupe FROM groupe WHERE libelle=:nomGroupe");
+		$reqSelIdGrp->bindValue(':nomGroupe', $nomGroupe);
+        $reqSelIdGrp->execute();
+		
+		$dataIdGrp = $reqSelIdGrp->fetch();
+           
+        return $dataIdGrp;
+    }
+	
+	
     /**
      * Selection des absences d'un étudiant de la base de données.
      *

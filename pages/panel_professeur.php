@@ -63,7 +63,7 @@ if (isset($_POST['absence_cours']) && trim($_POST['absence_cours']) != "") {
             <form class="leFormulaire" method="POST" action="index">
                 <p>Cours :</p>
                 <p><select name="absence_cours">
-                    <option value=""></option>
+                    <option value="">--Choix Cours--</option>
                     <?php
                         // TODO: maj avec AJAX quand on saisi un étudiant.
                         // Si on a saisi un étudiant.
@@ -95,7 +95,7 @@ if (isset($_POST['absence_cours']) && trim($_POST['absence_cours']) != "") {
                 }?>">
                 Département :
                 <select name="listeAbsence_dept">
-                    <option value=""></option>
+                    <option value="">--Choix Département--</option>
                     <?php
                         // On récupére tous les départements.
                         $departements = $dataManagement->selectAllDepartement();
@@ -112,7 +112,7 @@ if (isset($_POST['absence_cours']) && trim($_POST['absence_cours']) != "") {
                 </select>
                 Filière :
                 <select name="listeAbsence_filiere">
-                    <option value=""></option>
+                    <option value="">--Choix Filière--</option>
                     <?php
                         // TODO: maj avec AJAX quand on choisi un département.
                         if (isset($absence_idDepartement)) {
@@ -132,7 +132,7 @@ if (isset($_POST['absence_cours']) && trim($_POST['absence_cours']) != "") {
                 </select>
                 Groupe :
                 <select name="listeAbsence_groupe">
-                    <option value=""></option>
+                    <option value="">--Choix Groupe--</option>
                     <?php
                         // TODO: maj avec AJAX quand on choisi une filière.
                         if (isset($absence_idFiliere)) {

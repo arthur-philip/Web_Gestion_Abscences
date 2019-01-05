@@ -1,6 +1,5 @@
 <?php
-    include 'objets/Cour.php';
-    include 'DataManagement.php';
+    include 'objets/icsData.php';
 
     //On initialize la timezone
     // On utilise une commande pour donner la timezone par défault, pour utiliser les DATETIME par la suite
@@ -13,7 +12,7 @@
     */
     function icsExtractor($file)
     {
-        $calendar = $file;
+        $fichier = file_get_contents($file['tmp_name']);
 
         //Préparation des recherche dans le fichier ics
         $intituleCours = "/SUMMARY:(.*)/";
@@ -24,19 +23,19 @@
 
         // n sera le nombre d'élément du fichier ICS
         // recupère dans le tableau $coursTab tout les noms de cours
-        $n = preg_match_all($intituleCours, $calendar, $coursTab, PREG_PATTERN_ORDER);
+        $n = preg_match_all($intituleCours, $fichier, $coursTab, PREG_PATTERN_ORDER);
         
         // récupère dans le tableau dateTab tout les élements composant de la date début
-        preg_match_all($dateCours, $calendar, $dateTab, PREG_PATTERN_ORDER);
+        preg_match_all($dateCours, $fichier, $dateTab, PREG_PATTERN_ORDER);
         
         // recupère dans le tableau dateTabEnd tout les éléments composant de la date de fin
-        preg_match_all($dateCoursFin, $calendar, $dateTabEnd, PREG_PATTERN_ORDER);
+        preg_match_all($dateCoursFin, $fichier, $dateTabEnd, PREG_PATTERN_ORDER);
         
         // récupère dans le tableau descTab tout les éléments composant la description des cours (nomProf, promo)
-        preg_match_all($descCours, $calendar, $descTab, PREG_PATTERN_ORDER);
+        preg_match_all($descCours, $fichier, $descTab, PREG_PATTERN_ORDER);
 
         //recupère la salle de cours
-        preg_match_all($location, $calendar, $salleTab, PREG_PATTERN_ORDER);
+        preg_match_all($location, $fichier, $salleTab, PREG_PATTERN_ORDER);
 
         $returnTab = array();
         // Parcours de tout le tableau
@@ -71,21 +70,21 @@
             
             //Intialisation des chaines de caractère pour catégoriser les cours
             $promo = "";
-            $prof = array();
+            $prof = "";
             // Si il manque des infos alors on rajoutera les informations qui en découle
             for ($i = 0; $i < sizeof($descCours); $i++) {
                 
                 // Si il n'y a pas de chiffre ni de - et qu'il y a un espace alors c'est bien un prof
                 if (stripos($descCours[$i], " ") and preg_match('~[0-9]~', $descCours[$i]) === 0 and preg_match('~-~', $descCours[$i]) === 0) {
-                    $prof[] = $descCours[$i];
+                    $prof = $descCours[$i];
                 } else {
                     $promo .= $descCours[$i]."\\n";
                 }
             }
             
             // Si le prof n'est pas indiqué -->
-            if (sizeof($prof) == 0) {
-                $prof[] = "non déterminé";
+            if (trim($prof) == "") {
+                $prof = "non déterminé";
             }
 
             // Recupère le nom de la salle et sa description, en le détachant de LOCATION
@@ -100,8 +99,6 @@
                 $descSalle = "(".$salle[1]." ".$salle[2].")";
             }
 
-
-
             // format les données entre elles
             $dateD = $anneeD."-".$moisD."-".$jourD;
             $dateTimeD = new DateTime($dateD);
@@ -111,9 +108,8 @@
             $dateTimeF = new DateTime($dateF);
             $dateTimeF->setTime($heureF, $minF);
             
-            // ajoute le nouvel objet de cours au tableau de cours a return
-            $returnTab[$j] = new Cours($titreCours, $numSalle, $descSalle, $prof, $promo, $dateTimeD, $dateTimeF);
-            ;
+            // ajoute le nouvel objet de IcsData au tableau de IcsData a return
+            $returnTab[$j] = new IcsData($titreCours, $numSalle, $descSalle, $prof, $promo, $dateTimeD, $dateTimeF);
         }
 
         return $returnTab;

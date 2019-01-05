@@ -124,13 +124,19 @@
             $Matiere_idFiliere = htmlspecialchars($_POST['listeMatiere_filiere']);
         }
     }
+	
+		
+	if (isset($_POST['filiere'])){
+		
+		if ($_POST['filiere'] != ""){
+			
+			
+			
+		}	
+	}
 ?>
 <section>
     <?php
-    // TODO:
-        // Importation des étudiants
-        // Importation des plannings (Filière par filière)
-        // Suppression d’un planning (Filière par filière)
     ?>
     <h2 class="toggleNext">Panel administratif</h2>
     <div class="row justify-content-center">
@@ -138,19 +144,19 @@
             <form class="leFormulaire" method="POST" action="index">
                 <h3>Création d'un professeur</h3>
                 <p>Login</p>
-                <input type="text" name="createProf_login" value="<?php if (isset($createProf_login)) {
+                <input type="text" name="createProf_login" placeholder="Entrez le login ici" value="<?php if (isset($createProf_login)) {
                     echo $createProf_login;
                 } ?>" required>
                 <p>Mot de passe</p>
-                <input type="password" name="createProf_mdp" value="<?php if (isset($createProf_mdp)) {
+                <input type="password" name="createProf_mdp" placeholder="Entrez le mot de passe ici" value="<?php if (isset($createProf_mdp)) {
                     echo $createProf_mdp;
                 } ?>" required>
                 <p>Nom</p>
-                <input type="text" name="createProf_nom" value="<?php if (isset($createProf_nom)) {
+                <input type="text" name="createProf_nom" placeholder="Entrez le nom ici" value="<?php if (isset($createProf_nom)) {
                     echo $createProf_nom;
                 } ?>">
                 <p>Prenom</p>
-                <p><input type="text" name="createProf_prenom" value="<?php if (isset($createProf_prenom)) {
+                <p><input type="text" name="createProf_prenom" placeholder="Entrez le prenom ici" value="<?php if (isset($createProf_prenom)) {
                     echo $createProf_prenom;
                 } ?>"></p>
                 <input class="myButton" type="submit" value="Créer">
@@ -160,7 +166,7 @@
             <form class="leFormulaire" method="POST" action="index">
                 <h3>Création d'un département</h3>
                 <p>Nom</p>
-                <p><input type="text" name="createDepart_nom" value="<?php if (isset($createDepart_nom)) {
+                <p><input type="text" name="createDepart_nom" placeholder="Entrez le nom ici" value="<?php if (isset($createDepart_nom)) {
                     echo $createDepart_nom;
                 } ?>"  required></p>
                 <input class="myButton" type="submit" value="Créer">
@@ -170,11 +176,12 @@
             <form class="leFormulaire" method="POST" action="index">
                 <h3>Création d'une filière</h3>
                 <p>Nom</p>
-                <input type="text" name="createFiliere_nom" value="<?php if (isset($createFiliere_nom)) {
+                <input type="text" name="createFiliere_nom" placeholder="Entrez le nom ici" value="<?php if (isset($createFiliere_nom)) {
                     echo $createFiliere_nom;
                 } ?>" required>
                 <p>Département</p>
                 <p><select name="createFiliere_dep" required>
+                    <option value="">--Choix Département--</option>
                     <?php
 
                         // On récupére tous les départements.
@@ -194,14 +201,28 @@
             </form>
         </div>
         <div class="col-12 col-sm-9 col-md-7 col-lg-6 col-xl-3">
-            <h3>Importations des étudiants et des plannings + suppression d'un planning</h3>
+			<?php include('utils/remplissageBDD.php');?>
+            <form class="leFormulaire" method="POST" action="index">
+			    <h3>Suppression d'un planning</h3>
+			</form>
+			<form class="leFormulaire" method="POST" action="index">
+				<h3>Suppression des planning</h3>
+				<p><select name="filiere" size="5">
+					<?php 
+						
+						//echo "<option>".."</option>";
+						
+					?>
+				</select></p>			
+				<input class="myButton" type="submit" value="Supprimer">				
+			</form>
         </div>
         <div class="col-12 col-xl-7">
             <form class="leFormulaire" method="POST" action="index">
                 <h3>Liste des étudiants</h3>
                 Département :
                 <select name="listeEtudiant_dept">
-                    <option value=""></option>
+                    <option value="">--Choix Département--</option>
                     <?php
                         // On récupére tous les départements.
                         $departements = $dataManagement->selectAllDepartement();
@@ -218,7 +239,7 @@
                 </select>
                 Filière :
                 <select name="listeEtudiant_filiere">
-                    <option value=""></option>
+                    <option value="">--Choix Filière--</option>
                     <?php
                         // TODO: maj avec AJAX quand on choisi un département.
                         if (isset($Etudiant_idDepartement)) {
@@ -238,7 +259,7 @@
                 </select>
                 Groupe :
                 <select name="listeEtudiant_groupe">
-                    <option value=""></option>
+                    <option value="">--Choix Groupe--</option>
                     <?php
                         // TODO: maj avec AJAX quand on choisi une filière.
                         if (isset($Etudiant_idFiliere)) {
@@ -308,7 +329,7 @@
                 <h3>Liste des matières</h3>
                 Département :
                 <select name="listeMatiere_dept">
-                    <option value=""></option>
+                    <option value="">--Choix Département--</option>
                     <?php
                         // On récupére tous les départements.
                         $departements = $dataManagement->selectAllDepartement();
@@ -325,7 +346,7 @@
                 </select>
                 Filière :
                 <select name="listeMatiere_filiere">
-                    <option value=""></option>
+                    <option value="">--Choix Filière--</option>
                     <?php
                         // TODO: maj avec AJAX quand on choisi un département.
                         if (isset($Matiere_idDepartement)) {
