@@ -75,5 +75,4 @@ class Etudiant
     {
         $this->prenom = $prenom;
     }
-    
 }

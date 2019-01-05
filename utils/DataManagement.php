@@ -231,7 +231,7 @@ class DataManagement
     {
         $data = [];
         // Lecture la table Absence
-        $reqSAbsByEtu = $this->db->prepare("SELECT * FROM absence WHERE ine_etudiant = ?");
+        $reqSAbsByEtu = $this->db->prepare("SELECT DISTINCT * FROM absence WHERE ine_etudiant = ?");
         if ($reqSAbsByEtu->execute(array($etudiant->getINE()))) {
             // Si les informations sont correctes (au moins un résultat trouvé)
             for ($cpt=0; $ligne=$reqSAbsByEtu->fetch(); $cpt++) {
@@ -250,11 +250,14 @@ class DataManagement
     {
         $data = [];
         // Lecture des tables
-        $reqSelAllAbs = $this->db->prepare("SELECT etu.nom, etu.prenom, mat.libelle, cou.horaire_debut, cou.horaire_fin 
+        $reqSelAllAbs = $this->db->prepare("SELECT DISTINCT etu.nom, etu.prenom, mat.libelle, cou.horaire_debut, cou.horaire_fin 
                                             FROM absence abs, cours cou, cours_groupe cougro, etudiant etu, groupe gro, groupe_etudiant groetu, matiere mat 
-                                            WHERE gro.id_groupe = cougro.id_groupe AND gro.id_groupe = groetu.id_groupe
-                                            AND etu.ine_etudiant = groetu.ine_etudiant AND etu.ine_etudiant = abs.ine_etudiant
-                                            AND cou.id_cours = cougro.id_cours AND cou.id_cours = abs.id_cours
+                                            WHERE gro.id_groupe = cougro.id_groupe 
+                                            AND gro.id_groupe = groetu.id_groupe
+                                            AND etu.ine_etudiant = groetu.ine_etudiant 
+                                            AND etu.ine_etudiant = abs.ine_etudiant
+                                            AND cou.id_cours = cougro.id_cours 
+                                            AND cou.id_cours = abs.id_cours
                                             AND mat.id_matiere = cou.id_matiere");
         if ($reqSelAllAbs->execute()) {
             // Si les informations sont correctes (au moins un résultat trouvé)
@@ -276,13 +279,16 @@ class DataManagement
     {
         $data = [];
         // Lecture des tables
-        $reqSelAllAbsByGro = $this->db->prepare("SELECT etu.nom, etu.prenom, mat.libelle, cou.horaire_debut, cou.horaire_fin 
-                                            FROM absence abs, cours cou, cours_groupe cougro, etudiant etu, groupe gro, groupe_etudiant groetu, matiere mat 
-                                            WHERE gro.id_groupe = cougro.id_groupe AND gro.id_groupe = groetu.id_groupe
-                                            AND etu.ine_etudiant = groetu.ine_etudiant AND etu.ine_etudiant = abs.ine_etudiant
-                                            AND cou.id_cours = cougro.id_cours AND cou.id_cours = abs.id_cours
-                                            AND mat.id_matiere = cou.id_matiere
-                                            AND cou.id_cours = ?");
+        $reqSelAllAbsByGro = $this->db->prepare("SELECT DISTINCT etu.nom, etu.prenom, mat.libelle, cou.horaire_debut, cou.horaire_fin 
+                                                FROM absence abs, cours cou, cours_groupe cougro, etudiant etu, groupe gro, groupe_etudiant groetu, matiere mat 
+                                                WHERE gro.id_groupe = cougro.id_groupe 
+                                                AND gro.id_groupe = groetu.id_groupe
+                                                AND etu.ine_etudiant = groetu.ine_etudiant 
+                                                AND etu.ine_etudiant = abs.ine_etudiant
+                                                AND cou.id_cours = cougro.id_cours 
+                                                AND cou.id_cours = abs.id_cours
+                                                AND mat.id_matiere = cou.id_matiere
+                                                AND cou.id_cours = ?");
         if ($reqSelAllAbsByGro->execute(array($idGroupe))) {
             // Si les informations sont correctes (au moins un résultat trouvé)
             for ($cpt=0; $ligne=$reqSelAllAbsByGro->fetch(); $cpt++) {
@@ -303,13 +309,16 @@ class DataManagement
     {
         $data = [];
         // Lecture des tables
-        $reqSelAllAbsByFil = $this->db->prepare("SELECT etu.nom, etu.prenom, mat.libelle, cou.horaire_debut, cou.horaire_fin 
-                                            FROM absence abs, cours cou, cours_groupe cougro, etudiant etu, groupe gro, groupe_etudiant groetu, matiere mat 
-                                            WHERE gro.id_groupe = cougro.id_groupe AND gro.id_groupe = groetu.id_groupe
-                                            AND etu.ine_etudiant = groetu.ine_etudiant AND etu.ine_etudiant = abs.ine_etudiant
-                                            AND cou.id_cours = cougro.id_cours AND cou.id_cours = abs.id_cours
-                                            AND mat.id_matiere = cou.id_matiere
-                                            AND gro.id_filiere = ?");
+        $reqSelAllAbsByFil = $this->db->prepare("SELECT DISTINCT etu.nom, etu.prenom, mat.libelle, cou.horaire_debut, cou.horaire_fin 
+                                                FROM absence abs, cours cou, cours_groupe cougro, etudiant etu, groupe gro, groupe_etudiant groetu, matiere mat 
+                                                WHERE gro.id_groupe = cougro.id_groupe 
+                                                AND gro.id_groupe = groetu.id_groupe
+                                                AND etu.ine_etudiant = groetu.ine_etudiant 
+                                                AND etu.ine_etudiant = abs.ine_etudiant
+                                                AND cou.id_cours = cougro.id_cours 
+                                                AND cou.id_cours = abs.id_cours
+                                                AND mat.id_matiere = cou.id_matiere
+                                                AND gro.id_filiere = ?");
         if ($reqSelAllAbsByFil->execute(array($idFiliere))) {
             // Si les informations sont correctes (au moins un résultat trouvé)
             for ($cpt=0; $ligne=$reqSelAllAbsByFil->fetch(); $cpt++) {
@@ -330,13 +339,17 @@ class DataManagement
     {
         $data = [];
         // Lecture des tables
-        $reqSelAllAbsByDep = $this->db->prepare("SELECT etu.nom, etu.prenom, mat.libelle, cou.horaire_debut, cou.horaire_fin 
-                                            FROM absence abs, cours cou, cours_groupe cougro, etudiant etu, filiere fil, groupe gro, groupe_etudiant groetu, matiere mat 
-                                            WHERE gro.id_groupe = cougro.id_groupe AND gro.id_groupe = groetu.id_groupe
-                                            AND etu.ine_etudiant = groetu.ine_etudiant AND etu.ine_etudiant = abs.ine_etudiant
-                                            AND cou.id_cours = cougro.id_cours AND cou.id_cours = abs.id_cours
-                                            AND mat.id_matiere = cou.id_matiere
-                                            AND gro.id_filiere = fil.id_filiere AND fil.id_departement = ?");
+        $reqSelAllAbsByDep = $this->db->prepare("SELECT DISTINCT etu.nom, etu.prenom, mat.libelle, cou.horaire_debut, cou.horaire_fin 
+                                                FROM absence abs, cours cou, cours_groupe cougro, etudiant etu, filiere fil, groupe gro, groupe_etudiant groetu, matiere mat 
+                                                WHERE gro.id_groupe = cougro.id_groupe 
+                                                AND gro.id_groupe = groetu.id_groupe
+                                                AND etu.ine_etudiant = groetu.ine_etudiant 
+                                                AND etu.ine_etudiant = abs.ine_etudiant
+                                                AND cou.id_cours = cougro.id_cours 
+                                                AND cou.id_cours = abs.id_cours
+                                                AND mat.id_matiere = cou.id_matiere
+                                                AND gro.id_filiere = fil.id_filiere 
+                                                AND fil.id_departement = ?");
         if ($reqSelAllAbsByDep->execute(array($idDepartement))) {
             // Si les informations sont correctes (au moins un résultat trouvé)
             for ($cpt=0; $ligne=$reqSelAllAbsByDep->fetch(); $cpt++) {
@@ -357,11 +370,16 @@ class DataManagement
     {
         $data = [];
         // Lecture des tables
-        $reqSelAllCouByEtu = $this->db->prepare("SELECT mat.libelle, sal.libelle, cou.horaire_debut, cou.horaire_fin , cou.id_cours
+        $reqSelAllCouByEtu = $this->db->prepare("SELECT DISTINCT mat.libelle, sal.libelle, cou.horaire_debut, cou.horaire_fin , cou.id_cours
                                                 FROM cours cou, cours_groupe cougro, etudiant etu, groupe gro, groupe_etudiant groetu, matiere mat, salle sal
-                                                WHERE cou.id_matiere = mat.id_matiere AND cou.id_salle = sal.id_salle AND cou.id_cours = cougro.id_cours
-                                                AND gro.id_groupe = cougro.id_groupe AND gro.id_groupe = groetu.id_groupe
-                                                AND etu.ine_etudiant = groetu.ine_etudiant AND etu.nom = ? AND etu.prenom = ? ");
+                                                WHERE cou.id_matiere = mat.id_matiere 
+                                                AND cou.id_salle = sal.id_salle 
+                                                AND cou.id_cours = cougro.id_cours
+                                                AND gro.id_groupe = cougro.id_groupe 
+                                                AND gro.id_groupe = groetu.id_groupe
+                                                AND etu.ine_etudiant = groetu.ine_etudiant 
+                                                AND etu.nom = ? 
+                                                AND etu.prenom = ? ");
         if ($reqSelAllCouByEtu->execute(array($nomEtudiant, $prenomEtudiant))) {
             // Si les informations sont correctes (au moins un résultat trouvé)
             for ($cpt=0; $ligne=$reqSelAllCouByEtu->fetch(); $cpt++) {
@@ -373,7 +391,7 @@ class DataManagement
     }
 
     /**
-     * Selection de touts les départements de la base de données.
+     * Selection de tous les départements de la base de données.
      *
      * @return $data Tableau contenant toutes les absences.
     */
@@ -381,11 +399,100 @@ class DataManagement
     {
         $data = [];
         // Lecture la table Departement
-        $reqSelAllDep = $this->db->prepare("SELECT * FROM departement");
+        $reqSelAllDep = $this->db->prepare("SELECT DISTINCT * FROM departement");
         if ($reqSelAllDep->execute()) {
             // Si les informations sont correctes (au moins un résultat trouvé)
             for ($cpt=0; $ligne=$reqSelAllDep->fetch(); $cpt++) {
                 $data[$cpt] = new Departement($ligne["id_departement"], $ligne["libelle"]);
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * Selection de tous les étudiants de la base de données.
+     *
+     * @return $data Tableau contenant tous les étudiants.
+    */
+    public function selectAllEtudiant()
+    {
+        $data = [];
+        // Lecture la table Departement
+        $reqSelAllEtu = $this->db->prepare("SELECT DISTINCT ine_etudiant, nom, prenom FROM etudiant");
+        if ($reqSelAllEtu->execute()) {
+            // Si les informations sont correctes (au moins un résultat trouvé)
+            for ($cpt=0; $ligne=$reqSelAllEtu->fetch(); $cpt++) {
+                $data[$cpt] = new Etudiant($ligne["ine_etudiant"], $ligne["nom"], $ligne["prenom"]);
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * Selection de tous les étudiants d'un groupe dans la base de données.
+     *
+     * @return $data Tableau contenant tous les étudiants d'un groupe.
+    */
+    public function selectAllEtudiantByGroupe($idGroupe)
+    {
+        $data = [];
+        // Lecture la table Etudiant
+        $reqSelAllEtuByGro = $this->db->prepare("SELECT DISTINCT etu.ine_etudiant, etu.nom, etu.prenom 
+                                            FROM etudiant etu, groupe gro, groupe_etudiant groetu
+                                            WHERE etu.ine_etudiant = groetu.ine_etudiant
+                                            AND gro.id_groupe = groetu.id_groupe 
+                                            AND gro.id_groupe = ?");
+        if ($reqSelAllEtuByGro->execute(array($idGroupe))) {
+            // Si les informations sont correctes (au moins un résultat trouvé)
+            for ($cpt=0; $ligne=$reqSelAllEtuByGro->fetch(); $cpt++) {
+                $data[$cpt] = new Etudiant($ligne["ine_etudiant"], $ligne["nom"], $ligne["prenom"]);
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * Selection de tous les étudiants d'une filière dans la base de données.
+     *
+     * @return $data Tableau contenant tous les étudiants d'une filière.
+    */
+    public function selectAllEtudiantByFiliere($idFiliere)
+    {
+        $data = [];
+        // Lecture la table Etudiant
+        $reqSelAllEtuByFil = $this->db->prepare("SELECT DISTINCT etu.ine_etudiant, etu.nom, etu.prenom 
+                                            FROM etudiant etu, groupe gro, groupe_etudiant groetu
+                                            WHERE etu.ine_etudiant = groetu.ine_etudiant
+                                            AND gro.id_groupe = groetu.id_groupe 
+                                            AND gro.id_filiere = ?");
+        if ($reqSelAllEtuByFil->execute(array($idFiliere))) {
+            // Si les informations sont correctes (au moins un résultat trouvé)
+            for ($cpt=0; $ligne=$reqSelAllEtuByFil->fetch(); $cpt++) {
+                $data[$cpt] = new Etudiant($ligne["ine_etudiant"], $ligne["nom"], $ligne["prenom"]);
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * Selection de tous les étudiants d'un département dans la base de données.
+     *
+     * @return $data Tableau contenant tous les étudiants du département.
+    */
+    public function selectAllEtudiantByDepartement($idDepartement)
+    {
+        $data = [];
+        // Lecture la table Etudiant
+        $reqSelAllEtuByDep = $this->db->prepare("SELECT DISTINCT etu.ine_etudiant, etu.nom, etu.prenom 
+                                            FROM etudiant etu, filiere fil, groupe gro, groupe_etudiant groetu
+                                            WHERE etu.ine_etudiant = groetu.ine_etudiant
+                                            AND gro.id_groupe = groetu.id_groupe 
+                                            AND gro.id_filiere = fil.id_filiere
+                                            AND fil.id_departement = ?");
+        if ($reqSelAllEtuByDep->execute(array($idDepartement))) {
+            // Si les informations sont correctes (au moins un résultat trouvé)
+            for ($cpt=0; $ligne=$reqSelAllEtuByDep->fetch(); $cpt++) {
+                $data[$cpt] = new Etudiant($ligne["ine_etudiant"], $ligne["nom"], $ligne["prenom"]);
             }
         }
         return $data;
@@ -400,7 +507,7 @@ class DataManagement
     public function selectEtudiantByNomPrenom($nom, $prenom)
     {
         // Lecture la table Etudiant
-        $reqSelAllFilByDep = $this->db->prepare("SELECT * FROM etudiant WHERE nom = ? AND prenom = ?");
+        $reqSelAllFilByDep = $this->db->prepare("SELECT DISTINCT * FROM etudiant WHERE nom = ? AND prenom = ?");
         if ($reqSelAllFilByDep->execute(array($nom, $prenom))) {
             // Si les informations sont correctes (au moins un résultat trouvé)
             for ($cpt=0; $ligne=$reqSelAllFilByDep->fetch(); $cpt++) {
@@ -420,7 +527,7 @@ class DataManagement
     {
         $data = [];
         // Lecture la table Filiere
-        $reqSelAllFilByDep = $this->db->prepare("SELECT * FROM filiere WHERE id_departement = ?");
+        $reqSelAllFilByDep = $this->db->prepare("SELECT DISTINCT * FROM filiere WHERE id_departement = ?");
         if ($reqSelAllFilByDep->execute(array($departement))) {
             // Si les informations sont correctes (au moins un résultat trouvé)
             for ($cpt=0; $ligne=$reqSelAllFilByDep->fetch(); $cpt++) {
@@ -438,14 +545,82 @@ class DataManagement
     */
     public function selectAllGroupeByFiliere($filiere)
     {
-        //$data = [];
+        $data = [];
         // Lecture la table Groupe
-        $reqSelAllGroByFil = $this->db->prepare("SELECT * FROM groupe WHERE id_filiere = ?");
+        $reqSelAllGroByFil = $this->db->prepare("SELECT DISTINCT * FROM groupe WHERE id_filiere = ?");
         if ($reqSelAllGroByFil->execute(array($filiere))) {
             // Si les informations sont correctes (au moins un résultat trouvé)
             for ($cpt=0; $ligne=$reqSelAllGroByFil->fetch(); $cpt++) {
                 //$data[$cpt] = new Groupe($ligne["id_groupe"], $ligne["id_filiere"], $ligne["libelle"]);
                 $data[$cpt] = [$ligne["id_groupe"], $ligne["id_filiere"], $ligne["libelle"]];
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * Selection de toutes les matières de la base de données.
+     *
+     * @return $data Tableau contenant toutes les matières.
+    */
+    public function selectAllMatiere()
+    {
+        $data = [];
+        // Lecture la table Matiere
+        $reqSelAllMat = $this->db->prepare("SELECT DISTINCT id_matiere, libelle FROM matiere");
+        if ($reqSelAllMat->execute()) {
+            // Si les informations sont correctes (au moins un résultat trouvé)
+            for ($cpt=0; $ligne=$reqSelAllMat->fetch(); $cpt++) {
+                $data[$cpt] = new Matiere($ligne["id_matiere"], $ligne["libelle"]);
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * Selection de toutes les matières d'une filière dans la base de données.
+     *
+     * @return $data Tableau contenant toutes les matières d'une filière.
+    */
+    public function selectAllMatiereByFiliere($idFiliere)
+    {
+        $data = [];
+        // Lecture la table Matiere
+        $reqSelAllMat = $this->db->prepare("SELECT DISTINCT mat.id_matiere, mat.libelle
+                                            FROM cours cou, cours_groupe cougro, groupe gro, matiere mat
+                                            WHERE cou.id_matiere = mat.id_matiere 
+                                            AND cou.id_cours = cougro.id_cours
+                                            AND gro.id_groupe = cougro.id_groupe 
+                                            AND gro.id_filiere = ?");
+        if ($reqSelAllMat->execute(array($idFiliere))) {
+            // Si les informations sont correctes (au moins un résultat trouvé)
+            for ($cpt=0; $ligne=$reqSelAllMat->fetch(); $cpt++) {
+                $data[$cpt] = new Matiere($ligne["id_matiere"], $ligne["libelle"]);
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * Selection de toutes les matières d'un département dans la base de données.
+     *
+     * @return $data Tableau contenant toutes les matières d'un département.
+    */
+    public function selectAllMatiereByDepartement($idDepartement)
+    {
+        $data = [];
+        // Lecture la table Matiere
+        $reqSelAllMat = $this->db->prepare("SELECT DISTINCT mat.id_matiere, mat.libelle
+                                            FROM cours cou, cours_groupe cougro, filiere fil, groupe gro, matiere mat
+                                            WHERE cou.id_matiere = mat.id_matiere 
+                                            AND cou.id_cours = cougro.id_cours
+                                            AND gro.id_groupe = cougro.id_groupe 
+                                            AND gro.id_filiere = fil.id_filiere
+                                            AND fil.id_departement = ?");
+        if ($reqSelAllMat->execute(array($idDepartement))) {
+            // Si les informations sont correctes (au moins un résultat trouvé)
+            for ($cpt=0; $ligne=$reqSelAllMat->fetch(); $cpt++) {
+                $data[$cpt] = new Matiere($ligne["id_matiere"], $ligne["libelle"]);
             }
         }
         return $data;
@@ -460,7 +635,7 @@ class DataManagement
     public function selectPersonnelByLogin(Personnel $personnel)
     {
         // Lecture de la table Personnel
-        $reqSelPer = $this->db->prepare("SELECT * FROM personnel WHERE login = ?");
+        $reqSelPer = $this->db->prepare("SELECT DISTINCT * FROM personnel WHERE login = ?");
         if ($reqSelPer->execute(array($personnel->getLogin()))) {
             // Si les informations sont correctes (au moins un résultat trouvé)
             while ($ligne=$reqSelPer->fetch()) {
@@ -481,7 +656,7 @@ class DataManagement
      */
     public function checkUser($login, $password)
     {
-        $reqCheckUser = $this->db->prepare("select nom, prenom, id_responsabilite from personnel where login = ? and mdp = ?");
+        $reqCheckUser = $this->db->prepare("SELECT DISTINCT nom, prenom, id_responsabilite FROM personnel WHERE login = ? and mdp = ?");
         if ($reqCheckUser->execute(array($login, $password))) {
             // Si les informations sont correctes (au moins un résultat trouvé)
             while ($ligne=$reqCheckUser->fetch()) {

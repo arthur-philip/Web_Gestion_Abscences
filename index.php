@@ -12,6 +12,7 @@
     include_once('objets/Departement.php');
     include_once('objets/Etudiant.php');
     include_once('objets/Filiere.php');
+    include_once('objets/Matiere.php');
     include_once('objets/Personnel.php');
 
     // Connexion à la base de données.
@@ -68,7 +69,7 @@
             }
         ?>
         <!--FOOTER-->
-        <div class="row">
+        <div class="row" id="footer">
 			<div class="col-12">
 				<footer>
 					<h5>Arthur Philip, Jordan Pedrero, Thibault Kuzmycz</h5>

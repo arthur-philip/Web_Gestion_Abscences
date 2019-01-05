@@ -117,5 +117,4 @@ class Cours
     {
         $this->horaire_fin = $pHoraireFin;
     }
-
 }
