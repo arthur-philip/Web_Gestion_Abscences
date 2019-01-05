@@ -11,13 +11,13 @@
         exit();
     }
 
-    // On vérifie s'il y a des informations de connexion dans le POST
+    // On vérifie s'il y a des informations de connexion dans le POST.
     if (isset($_POST['login']) && isset($_POST['password'])) {
-        // Récupération des informations
+        // Récupération des informations.
         $login = htmlspecialchars($_POST['login']);
         $password = htmlspecialchars($_POST['password']);
         
-        // Si la fonction qui vérifie l'existance de l'utilisateur saisi ne renvoi pas -1
+        // Si la fonction qui vérifie l'existance de l'utilisateur saisi ne renvoi pas -1.
         $data = $dataManagement->checkUser($login, $password);
         if ($data != -1) {
             // Maj des variables de session
@@ -27,13 +27,13 @@
             $_SESSION["prenom"]=$data[1];
             $_SESSION["responsabilite"]=$data[2];
         }
-        // Sinon affiche l'erreur
+        // Sinon affiche l'erreur.
         else {
             echo "<script>alert(\"Login/mot de passe incorrect, réessayez\")</script>";
         }
     }
 
-    //si user dans la session -> retour à l'index
+    // Si on a un utilisateur dans la session, retour à l'index.
     if (isset($_SESSION['login']) && isset($_SESSION['password'])) {
         header('Location: ../index');
         exit();

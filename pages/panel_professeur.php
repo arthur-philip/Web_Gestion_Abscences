@@ -35,7 +35,7 @@ if (isset($_POST['absence_cours']) && trim($_POST['absence_cours']) != "") {
     // On récupère les valeurs du cours et de l'étudiant.
     $absence_cours = explode("-", htmlspecialchars($_POST['absence_cours']));
 
-    // Créer l'absence
+    // Création de l'absence.
     try {
         $dataManagement->insertAbsence($absence_cours[1], $absence_cours[0]);
     } catch (Exception $e) {

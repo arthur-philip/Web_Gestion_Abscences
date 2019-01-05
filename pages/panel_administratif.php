@@ -1,8 +1,5 @@
 <?php
 
-    //icsExtractor(file_get_contents("ICS/Informatique.ics"));
-    //var_dump(icsExtractor(file_get_contents("ICS/Informatique.ics")));
-
     // Formulaire de création d'un professeur.
     if (isset($_POST['createProf_login']) && isset($_POST['createProf_mdp']) && isset($_POST['createProf_nom']) && isset($_POST['createProf_prenom'])) {
 
@@ -127,8 +124,6 @@
             $Matiere_idFiliere = htmlspecialchars($_POST['listeMatiere_filiere']);
         }
     }
-
-
 ?>
 <section>
     <?php
@@ -278,30 +273,31 @@
                 <tbody>
                     <?php
                         $etudiants = [];
-                    // Si on n'a choisi qu'un département.
-                    if (isset($Etudiant_idDepartement)) {
-                        // Si on a aussi choisi une filière.
-                        if (isset($Etudiant_idFiliere)) {
-                            // Si on a aussi choisi un groupe.
-                            if (isset($Etudiant_idGroupe)) {
-                                // On récupère les étudiants du groupe.
-                                $etudiants = $dataManagement->selectAllEtudiantByGroupe($Etudiant_idGroupe);
+                        // Si on n'a choisi qu'un département.
+                        if (isset($Etudiant_idDepartement)) {
+                            // Si on a aussi choisi une filière.
+                            if (isset($Etudiant_idFiliere)) {
+                                // Si on a aussi choisi un groupe.
+                                if (isset($Etudiant_idGroupe)) {
+                                    // On récupère les étudiants du groupe.
+                                    $etudiants = $dataManagement->selectAllEtudiantByGroupe($Etudiant_idGroupe);
+                                } else {
+                                    // On récupère les étudiants de la filiere.
+                                    $etudiants = $dataManagement->selectAllEtudiantByFiliere($Etudiant_idFiliere);
+                                }
                             } else {
-                                // On récupère les étudiants de la filiere.
-                                $etudiants = $dataManagement->selectAllEtudiantByFiliere($Etudiant_idFiliere);
+                                // On récupère les étudiants du département.
+                                $etudiants = $dataManagement->selectAllEtudiantByDepartement($Etudiant_idDepartement);
                             }
                         } else {
-                            // On récupère les étudiants du département.
-                            $etudiants = $dataManagement->selectAllEtudiantByDepartement($Etudiant_idDepartement);
+                            // On récupère tous les étudiants.
+                            $etudiants = $dataManagement->selectAllEtudiant();
                         }
-                    } else {
-                        // On récupère tous les étudiants.
-                        $etudiants = $dataManagement->selectAllEtudiant();
-                    }
-                    // Afficher les étudiants.
-                    foreach ($etudiants as $etudiant) {
-                        print("<tr><td>".$etudiant->getINE()."</td><td>".$etudiant->getNom()."</td><td>".$etudiant->getPrenom()."</td></tr>");
-                    } ?>
+                        // Afficher les étudiants.
+                        foreach ($etudiants as $etudiant) {
+                            print("<tr><td>".$etudiant->getINE()."</td><td>".$etudiant->getNom()."</td><td>".$etudiant->getPrenom()."</td></tr>");
+                        }
+                    ?>
                 </tbody>
             </table>
             <?php
@@ -361,24 +357,29 @@
                 <tbody>
                     <?php
                         $matieres = [];
-                    // Si on n'a choisi qu'un département.
-                    if (isset($Matiere_idDepartement)) {
-                        // Si on a aussi choisi une filière.
-                        if (isset($Matiere_idFiliere)) {
-                            // On récupère les matières de la filière.
-                            $matieres = $dataManagement->selectAllMatiereByFiliere($Matiere_idFiliere);
+
+                        // Si on n'a choisi qu'un département.
+                        if (isset($Matiere_idDepartement)) {
+
+                            // Si on a aussi choisi une filière.
+                            if (isset($Matiere_idFiliere)) {
+
+                                // On récupère les matières de la filière.
+                                $matieres = $dataManagement->selectAllMatiereByFiliere($Matiere_idFiliere);
+                            } else {
+                                // On récupère les matières du département.
+                                $matieres = $dataManagement->selectAllMatiereByDepartement($Matiere_idDepartement);
+                            }
                         } else {
-                            // On récupère les matières du département.
-                            $matieres = $dataManagement->selectAllMatiereByDepartement($Matiere_idDepartement);
+                            // On récupère toutes les matières.
+                            $matieres = $dataManagement->selectAllMatiere();
                         }
-                    } else {
-                        // On récupère toutes les matières.
-                        $matieres = $dataManagement->selectAllMatiere();
-                    }
-                    // Afficher les matières.
-                    foreach ($matieres as $matiere) {
-                        print("<tr><td>".$matiere->getLibelle()."</td></tr>");
-                    } ?>
+                        
+                        // Afficher les matières.
+                        foreach ($matieres as $matiere) {
+                            print("<tr><td>".$matiere->getLibelle()."</td></tr>");
+                        }
+                    ?>
                 </tbody>
             </table>
             <?php

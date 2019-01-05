@@ -30,6 +30,7 @@
                 echo "<script>alert('Erreur lors de la création du personnel administratif.');</script>";
                 exit;
             }
+            
             // Afficher un message confirmant l'insertion et vider les valeurs du formulaire.
             echo "<script>alert('Création du personnel administratif réussie.');</script>";
             $createAdmin_login = "";
