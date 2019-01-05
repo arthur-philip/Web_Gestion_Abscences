@@ -202,11 +202,8 @@
         </div>
         <div class="col-12 col-sm-9 col-md-7 col-lg-6 col-xl-3">
 			<?php include('utils/remplissageBDD.php');?>
-            <form class="leFormulaire" method="POST" action="index">
-			    <h3>Suppression d'un planning</h3>
-			</form>
 			<form class="leFormulaire" method="POST" action="index">
-				<h3>Suppression des planning</h3>
+				<h3>Suppression des plannings</h3>
 				<p><select name="filiere" size="5">
 					<?php 
 						
