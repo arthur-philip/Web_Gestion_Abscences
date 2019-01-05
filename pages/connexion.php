@@ -53,7 +53,7 @@
         <div class="row justify-content-center">
 			<div class="col-10 col-sm-8 col-md-6 col-lg-4 col-xl-3">
 				<div id="conteneur">
-					<form name="form" id="leFormulaire" method="POST" action="connexion">
+					<form name="form" class="leFormulaire" method="POST" action="connexion">
                         <h1>Connexion</h1>
 						<h3>Login</h3>
                         <p><input type="text" name="login" placeholder="Entrez votre login ici" value="<?php if (isset($login)) {

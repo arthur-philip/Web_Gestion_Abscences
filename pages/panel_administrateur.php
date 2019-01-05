@@ -47,7 +47,7 @@
 <section class="row justify-content-center">
     <h2 class="toggleNext">Panel administrateur</h2>
     <div class="col-12 col-sm-9 col-md-7 col-lg-5 col-xl-4">
-        <form id="leFormulaire" method="POST" action="index">
+        <form class="leFormulaire" method="POST" action="index">
             <h4>Création d'un administratif</h4>
             <p>Login</p>
             <p><input type="text" name="createAdmin_login" value="<?php if (isset($createAdmin_login)) {

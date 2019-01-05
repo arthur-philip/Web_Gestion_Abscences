@@ -113,7 +113,7 @@
 
     // Formulaire d'affichage des matières en fonction du département et de la filière.
     if (isset($_POST['listeMatiere_dept']) && trim($_POST['listeMatiere_dept']) != "") {
-        
+
         // On prend l'id du département choisi.
         $Matiere_idDepartement = htmlspecialchars($_POST['listeMatiere_dept']);
 
@@ -135,7 +135,7 @@
     <h2 class="toggleNext">Panel administratif</h2>
     <div class="row justify-content-center">
         <div class="col-12 col-sm-9 col-md-7 col-lg-6 col-xl-3">
-            <form id="leFormulaire" method="POST" action="index">
+            <form class="leFormulaire" method="POST" action="index">
                 <h3>Création d'un professeur</h3>
                 <p>Login</p>
                 <input type="text" name="createProf_login" value="<?php if (isset($createProf_login)) {
@@ -157,7 +157,7 @@
             </form>
         </div>
         <div class="col-12 col-sm-9 col-md-7 col-lg-6 col-xl-3">
-            <form id="leFormulaire" method="POST" action="index">
+            <form class="leFormulaire" method="POST" action="index">
                 <h3>Création d'un département</h3>
                 <p>Nom</p>
                 <p><input type="text" name="createDepart_nom" value="<?php if (isset($createDepart_nom)) {
@@ -167,7 +167,7 @@
             </form>
         </div>
         <div class="col-12 col-sm-9 col-md-7 col-lg-6 col-xl-3">
-            <form id="leFormulaire" method="POST" action="index">
+            <form class="leFormulaire" method="POST" action="index">
                 <h3>Création d'une filière</h3>
                 <p>Nom</p>
                 <input type="text" name="createFiliere_nom" value="<?php if (isset($createFiliere_nom)) {
@@ -197,7 +197,7 @@
             <h3>Importations des étudiants et des plannings + suppression d'un planning</h3>
         </div>
         <div class="col-12 col-xl-7">
-            <form id="leFormulaire" method="POST" action="index">
+            <form class="leFormulaire" method="POST" action="index">
                 <h3>Liste des étudiants</h3>
                 Département :
                 <select name="listeEtudiant_dept">
@@ -304,7 +304,7 @@
                 } ?>
         </div>
         <div class="col-12 col-xl-5">
-            <form id="leFormulaire" method="POST" action="index">
+            <form class="leFormulaire" method="POST" action="index">
                 <h3>Liste des matières</h3>
                 Département :
                 <select name="listeMatiere_dept">

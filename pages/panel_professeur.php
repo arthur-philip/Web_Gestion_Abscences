@@ -52,7 +52,7 @@ if (isset($_POST['absence_cours']) && trim($_POST['absence_cours']) != "") {
     <h2 class="toggleNext">Panel professeur</h2>
     <div class="row">
         <div class="col-12 col-lg-3 ">
-            <form id="leFormulaire" method="POST" action="index">
+            <form class="leFormulaire" method="POST" action="index">
                 <h3>Saisie d'une absence</h3>
                 <p>Étudiant :</p>
                 <p><input type="text" name="absence_etudiant" placeholder="Nom Prénom" value="<?php if (isset($absence_etudiant)) {
@@ -60,7 +60,7 @@ if (isset($_POST['absence_cours']) && trim($_POST['absence_cours']) != "") {
                 }?>"></p>
                 <input class="myButton" type="submit" value="Rechercher">
             </form>
-            <form id="leFormulaire" method="POST" action="index">
+            <form class="leFormulaire" method="POST" action="index">
                 <p>Cours :</p>
                 <p><select name="absence_cours">
                     <option value=""></option>
@@ -87,7 +87,7 @@ if (isset($_POST['absence_cours']) && trim($_POST['absence_cours']) != "") {
             </form>
         </div>
         <div class="col-12 col-lg-9">
-            <form id="leFormulaire" method="POST" action="index">
+            <form class="leFormulaire" method="POST" action="index">
                 <h3>Liste des absences</h3>
                 Étudiant :
                 <input type="text" name="listeAbsence_etudiant" placeholder="Nom Prénom" value="<?php if (isset($listeAbsence_etudiant)) {
