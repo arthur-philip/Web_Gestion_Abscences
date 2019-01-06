@@ -18,6 +18,6 @@ DF3, 11 COURS, 0N SALLE
 DF4, 11 COURS, 0N MATIERE
 DF5, 0N RESPONSABILITE, 11 PERSONNEL
 
-SALLE: id_salle, libelle
+SALLE: id_salle, libelle, desc_salle
 MATIERE: id_matiere, libelle
 RESPONSABILITE: id_responsabilite, libelle

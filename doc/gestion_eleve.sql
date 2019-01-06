@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  sam. 05 jan. 2019 à 15:14
+-- Généré le :  Dim 06 jan. 2019 à 00:17
 -- Version du serveur :  5.7.23
 -- Version de PHP :  7.2.10
 
@@ -35,8 +35,8 @@ CREATE TABLE IF NOT EXISTS `absence` (
   `ine_etudiant` varchar(11) NOT NULL,
   PRIMARY KEY (`id_absence`),
   UNIQUE KEY `id_cours` (`id_cours`,`ine_etudiant`),
-  KEY `absence_cours_fk` (`id_cours`),
-  KEY `absence_etudiant_fk` (`ine_etudiant`) USING BTREE
+  KEY `abscence_cours_fk` (`id_cours`),
+  KEY `abscence_etudiant_fk` (`ine_etudiant`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -197,16 +197,16 @@ CREATE TABLE IF NOT EXISTS `personnel` (
   PRIMARY KEY (`id_personnel`),
   UNIQUE KEY `login` (`login`),
   KEY `personnel_responsabilite_fk` (`id_responsabilite`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `personnel`
 --
 
 INSERT INTO `personnel` (`id_personnel`, `login`, `mdp`, `nom`, `prenom`, `id_responsabilite`) VALUES
-(0, 'admin', 'admin', '', '', 0),
-(1, 'administratif', 'administratif', '', '', 1),
-(2, 'prof', 'prof', '', '', 2);
+(1, 'admin', 'admin', '', '', 0),
+(2, 'administratif', 'administratif', '', '', 1),
+(3, 'prof', 'prof', '', '', 2);
 
 -- --------------------------------------------------------
 
@@ -253,8 +253,8 @@ CREATE TABLE IF NOT EXISTS `salle` (
 -- Contraintes pour la table `absence`
 --
 ALTER TABLE `absence`
-  ADD CONSTRAINT `absence_cours_fk` FOREIGN KEY (`id_cours`) REFERENCES `cours` (`id_cours`),
-  ADD CONSTRAINT `absence_etudiant_fk` FOREIGN KEY (`ine_etudiant`) REFERENCES `etudiant` (`ine_etudiant`);
+  ADD CONSTRAINT `abscence_cours_fk` FOREIGN KEY (`id_cours`) REFERENCES `cours` (`id_cours`),
+  ADD CONSTRAINT `abscence_etudiant_fk` FOREIGN KEY (`ine_etudiant`) REFERENCES `etudiant` (`ine_etudiant`);
 
 --
 -- Contraintes pour la table `cours`

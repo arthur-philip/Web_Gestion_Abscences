@@ -12,41 +12,46 @@
 	include_once('objets/Groupe.php');
 	include_once('objets/CoursGroupe.php');
 	
-	if (isset($_FILES['icsFile']) && isset($_FILES['csvFile'])) {
+	if (isset($_FILES['icsFile']) && isset($_FILES['csvFile']) && isset($_POST['filiere'])) {
 		
 		$dataManagement = new DataManagement();
 		
-		if ($_FILES['icsFile']['name'] != "" && $_FILES['csvFile']['name'] != ""){
+		if ($_FILES['icsFile']['name'] != "" && $_FILES['csvFile']['name'] != "" && $_POST['filiere']!=""){
 			// ------------ importation des données ics
 	
 			$icsTab = icsExtractor($_FILES['icsFile']);
 			
-			importIcs($_FILES['icsFile']['name'], $icsTab, $dataManagement);
+			importIcs($_POST['filiere'], $icsTab, $dataManagement);
 			// ------------ importation des données csv
 			
 			importEtudiant($_FILES['csvFile']);
 			
-		} else if($_FILES['icsFile']['name'] != "" && $_FILES['csvFile']['name'] == "") {
+			 echo "<script>alert('Impportation Ics et Csv terminé!.');</script>";
+			
+		} else if($_FILES['icsFile']['name'] != "" && $_FILES['csvFile']['name'] == "" &&  $_POST['filiere']!="") {
 		
 			// ------------ importation des données ics
 			$icsTab = icsExtractor($_FILES['icsFile']);			
 			
-			importIcs($_FILES['icsFile']['name'], $icsTab, $dataManagement);
+			importIcs($_POST['filiere'], $icsTab, $dataManagement);
 			// ------------ Création des données supplémentaires
 
+			 echo "<script>alert('Impportation Ics terminé!.');</script>";
 			
 		} else if($_FILES['icsFile']['name'] == "" &&  $_FILES['csvFile']['name'] != "") {
 			
 			// ------------ importation des données csv
 			importEtudiant($_FILES['csvFile']);
 			
+			echo "<script>alert('Impportation Csv terminé!.');</script>";
+			
 		} else {
 			
-			echo "merci de selectionner au moins un fichier";
+			echo "<script>alert('merci de selectionner au moins un fichier et une filiere dans le cas de l'ics.');</script>";
 		}
 	}
 
-	function importIcs($fileName, $icsTab, DataManagement $dataManagement){
+	function importIcs($idFiliere, $icsTab, DataManagement $dataManagement){
 		
 		foreach($icsTab as $icsData){
 				
@@ -58,6 +63,7 @@
 			}
 			
 			$newSalle = new Salle(null, $icsData->getNumSalle(), $icsData->getDescSalle());
+			
 			try {
 				$dataManagement->insertSalle($newSalle);
 			} catch (Exception $e) {
@@ -72,6 +78,7 @@
 			
 			
 			$newCours = new Cours(null, $idMatiere, $idSalle, $icsData->getDateTimeD(), $icsData->getDateTimeF());
+			
 			try {
 				$dataManagement->insertCours($newCours);
 			} catch (Exception $e) {
@@ -94,7 +101,6 @@
 					 echo $e->getMessage();
 				}
 				
-				
 				$id_cours = $dataManagement->selectIdCours($idMatiere, $idSalle, $icsData->getDateTimeD(), $icsData->getDateTimeF());
 				$idCours = $id_cours[0];
 				
@@ -110,16 +116,17 @@
 					 echo $e->getMessage();
 				}
 				
-				$newFiliere = new Filiere(null, null, $fileName);
-				try {
-					$dataManagement->insertFiliereSansDep($newFiliere->getLibelle());
-				} catch (Exception $e) {
-					 echo $e->getMessage();
-				}
+				//$newFiliere = new Filiere(null, null, $fileName);
+				//try {
+				//	$dataManagement->insertFiliereSansDep($newFiliere->getLibelle());
+				//} catch (Exception $e) {
+				//	 echo $e->getMessage();
+				//}
 				
-				$id_filiere = $dataManagement->selectIdFiliere($fileName);
-				$idFilliere = $id_filiere[0];
-				$newGroupe = new Groupe(null, $idFilliere, $icsData->getPromo());
+				//$id_filiere = $dataManagement->selectIdFiliere($fileName);
+				//$idFiliere = $id_filiere[0];
+				$newGroupe = new Groupe(null, $idFiliere, $icsData->getPromo());
+				
 				try {
 					$dataManagement->insertGroupe($newGroupe);
 				} catch (Exception $e) {
@@ -130,6 +137,7 @@
 				$idGroupe = $id_groupe[0];
 				
 				$newCoursGroupe = new CoursGroupe($idCours, $idGroupe);
+				
 				try {
 					$dataManagement->insertCoursGroupe($newCoursGroupe);
 				} catch (Exception $e) {
@@ -143,6 +151,16 @@
 <form method="POST" action="index" class="leFormulaire" enctype="multipart/form-data">
 	<h3>Importations des étudiants et des plannings</h3>
 
+	<p>Choix de la filiere</p>
+	<select name="filiere" size="5">
+		<?php 
+			$tabFiliere = $dataManagement->selectAllFiliere();
+			foreach($tabFiliere as $dataFiliere){
+				echo "<option value='".$dataFiliere->getIdFiliere()."'>".$dataFiliere->getLibelle()."</option>";
+			}
+			
+		?>
+	</select>
 	<p>ICS File</p>
 	<p><input type="file" name="icsFile" accept=".ics"></p>
 

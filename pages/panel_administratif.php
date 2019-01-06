@@ -126,12 +126,10 @@
     }
 	
 		
-	if (isset($_POST['filiere'])){
-		
-		if ($_POST['filiere'] != ""){
-			
-			
-			
+	if (isset($_POST['filiereASupr'])){		
+		if ($_POST['filiereASupr'] != ""){		
+			$dataManagement->deletePlanning($_POST['filiereASupr']);
+			echo "<script>alert('Planning supprimmer.');</script>";
 		}	
 	}
 ?>
@@ -204,10 +202,12 @@
 			<?php include('utils/remplissageBDD.php');?>
 			<form class="leFormulaire" method="POST" action="index">
 				<h3>Suppression des plannings</h3>
-				<p><select name="filiere" size="5">
+				<p><select name="filiereASupr" size="5">
 					<?php 
 						
-						//echo "<option>".."</option>";
+						foreach($tabFiliere as $dataFiliere){
+							echo "<option value='".$dataFiliere->getIdFiliere()."'>".$dataFiliere->getLibelle()."</option>";
+						}
 						
 					?>
 				</select></p>			

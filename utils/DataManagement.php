@@ -296,8 +296,125 @@ class DataManagement
         $reqDelAbs->execute();
     }
 
+	 /**
+     * Suppression d'un Anime par id cours en base de données.
+     *
+     * @param $idCours Anime à supprimer de la base de données.
+    */
+    public function deleteAnimeByIdCours($idCours)
+    {
+        // delete dans la table Anime
+        $reqDelAnimeByIdCours = $this->db->prepare("DELETE FROM Anime WHERE id_cours = :idCours");
+        $reqDelAnimeByIdCours->bindValue(':idCours', $idCours);
+        $reqDelAnimeByIdCours->execute();
+    }
+	
+	 /**
+     * Suppression d'un cours_groupe par id cours en base de données.
+     *
+     * @param $idCours cours_groupe à supprimer de la base de données.
+    */
+    public function deleteCoursGroupeByIdCours($idCours)
+    {
+        // delete dans la table Anime
+        $reqDelCoursGroupeByIdCours = $this->db->prepare("DELETE FROM cours_groupe WHERE id_cours = :idCours");
+        $reqDelCoursGroupeByIdCours->bindValue(':idCours', $idCours);
+        $reqDelCoursGroupeByIdCours->execute();
+    }
+	
+	 /**
+     * Suppression d'une Absence par id cours en base de données.
+     *
+     * @param $idCours Absence à supprimer de la base de données.
+    */
+    public function deleteAbsenceByIdCours($idCours)
+    {
+        // delete dans la table Anime
+        $reqDelAbsenceByIdCours = $this->db->prepare("DELETE FROM absence WHERE id_cours = :idCours");
+        $reqDelAbsenceByIdCours->bindValue(':idCours', $idCours);
+        $reqDelAbsenceByIdCours->execute();
+    }
+	
+	/**
+     * Suppression d'un cours par id cours en base de données.
+     *
+     * @param $idCours cours à supprimer de la base de données.
+    */
+    public function deleteCoursByIdCours($idCours)
+    {
+        // delete dans la table Anime
+        $reqDelCoursByIdCours = $this->db->prepare("DELETE FROM cours WHERE id_cours = :idCours");
+        $reqDelCoursByIdCours->bindValue(':idCours', $idCours);
+        $reqDelCoursByIdCours->execute();
+    }
+	
+	/**
+     * Suppression du planning d'une filiere en base de données.
+     *
+     * @param $idFiliere l'id de la filiere dont on veut supprimer tout le planning.
+    */
+    public function deletePlanning($idFiliere)
+    {
+        
+		$idGroupeTab = $this->selectIdGroupeByFiliere($idFiliere);
+		
+		foreach($idGroupeTab as $idGroupe){
+			
+			$id_coursGroupeTab = $this->selectIdCoursCGByIdGrp($idGroupe);
+
+			foreach($id_coursGroupeTab as $idCours){
+				
+				$this->deleteAnimeByIdCours($idCours);
+				$this->deleteCoursGroupeByIdCours($idCours);
+				$this->deleteAbsenceByIdCours($idCours);
+				$this->deleteCoursByIdCours($idCours);
+				
+			}			
+		}
+    }
+	
     //----------SELECT----------\\
 
+	/**
+     * Selection des ID des cours dans coursGroupe en fonction d'un nom de groupe.
+     *
+     * @return $data id du cours.
+    */
+    public function selectIdCoursCGByIdGrp($idGroupe)
+    {
+		$dataIdCours = [];
+        // Lecture la table cours
+        $reqSelIdCours = $this->db->prepare("SELECT id_cours FROM cours_groupe WHERE id_groupe=:idGroupe");
+		$reqSelIdCours->bindValue(':idGroupe', $idGroupe);
+        $reqSelIdCours->execute();
+		
+		for ($cpt=0; $ligne=$reqSelIdCours->fetch(); $cpt++) {
+			$dataIdCours[$cpt] = $ligne["id_cours"];
+		}
+		
+        return $dataIdCours;
+    }
+	
+	/**
+     * Selection des ID des groupe dans la base de données en fonction d'un id de filiere.
+     *
+     * @return $dataIdGrp id du groupe.
+    */
+    public function selectIdGroupeByFiliere($idFiliere)
+    {
+		$dataIdGrp = [];
+        // Lecture la table groupe
+        $reqSelIdGrp = $this->db->prepare("SELECT id_groupe FROM groupe WHERE id_filiere=:idFiliere");
+		$reqSelIdGrp->bindValue(':idFiliere', $idFiliere);
+        $reqSelIdGrp->execute();
+		         
+	   for ($cpt=0; $ligne=$reqSelIdGrp->fetch(); $cpt++) {
+			$dataIdGrp[$cpt] = $ligne["id_groupe"];
+		}
+		   
+        return $dataIdGrp;
+    }
+	
 	/**
      * Selection des ID des matieres dans la base de données en fonction d'un nom de matiere.
      *
@@ -720,6 +837,24 @@ class DataManagement
         return $data;
     }
 
+	/**
+     * Selection de toutes les filières en base de données.
+     *
+     * @return $data Tableau contenant toutes les filières.
+    */
+    public function selectAllFiliere()
+    {
+        $data = [];
+        // Lecture la table Filiere
+        $reqSelAllFil = $this->db->prepare("SELECT DISTINCT * FROM filiere");
+        if($reqSelAllFil->execute()) {
+            for ($cpt=0; $ligne=$reqSelAllFil->fetch(); $cpt++) {
+                $data[$cpt] = new Filiere($ligne["id_filiere"], $ligne["id_departement"], $ligne["libelle"]);
+            }
+        }
+        return $data;
+    }
+	
     /**
      * Selection de tous les groupes d'une filière en base de données.
      *
